@@ -17,6 +17,8 @@ PowerlineExtractor::PowerlineExtractor(ros::NodeHandle& nh, ros::NodeHandle& pri
     
     // 加载参数
     loadParameters();
+    //初始化累积点云
+    initializeAccumulateCloud();
     
     // 初始化粗提取器
     initializeCoarseExtractor();
@@ -96,12 +98,21 @@ void PowerlineExtractor::initializePublishers() {
     preprocessed_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("preprocessed_cloud", 1);
     powerline_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("powerline_cloud", 1);
     clustered_powerline_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("clustered_powerline_cloud", 1);
-    
-    // 注意：移除了non_ground_cloud_pub_，因为我们不再进行地面点移除
+    // 累积点云的发布器
+    accumulated_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("accumulated_cloud", 1);
     
     ROS_INFO("Publishers initialized");
 }
+void PowerlineExtractor::initializeAccumulateCloud()
+{
+    accumulator_.reset(new PointCloudAccumulator());
+    // 从参数服务器加载参数
+    accumulator_->loadParamsFromServer(private_nh_);
 
+    ROS_INFO("Accumulate Cloud initialized");
+
+
+}
 void PowerlineExtractor::initializeSubscribers() {
     point_cloud_sub_ = nh_.subscribe(lidar_topic_, 1, &PowerlineExtractor::pointCloudCallback, this);
     ROS_INFO("Subscribed to point cloud topic: %s", lidar_topic_.c_str());
@@ -135,9 +146,24 @@ void PowerlineExtractor::pointCloudCallback(const sensor_msgs::PointCloud2::Cons
             ROS_WARN("Received empty point cloud");
             return;
         }
+
+        accumulator_->addPointCloud(original_cloud_, msg->header.stamp);
+        // 获取累积的稳定点云
+        pcl::PointCloud<pcl::PointXYZI>::Ptr stable_cloud = accumulator_->getStableCloud();
+
+        if (!stable_cloud || stable_cloud->empty()) {
+            ROS_WARN("Accumulate cloud returned empty cloud, skipping this frame");
+            return;
+        }
         
         // 使用粗提取器进行电力线粗提取
-        if (!coarse_extractor_->extractPowerlines(original_cloud_, powerline_cloud_)) {
+        // if (!coarse_extractor_->extractPowerlines(original_cloud_, powerline_cloud_)) {
+        //     ROS_WARN("Coarse extraction failed, skipping this frame");
+        //     return;
+        // }
+    
+
+        if (!coarse_extractor_->extractPowerlines(stable_cloud, powerline_cloud_)) {
             ROS_WARN("Coarse extraction failed, skipping this frame");
             return;
         }
@@ -253,6 +279,18 @@ void PowerlineExtractor::publishPointClouds(const pcl::PointCloud<pcl::PointXYZI
         original_cloud_pub_.publish(original_msg);
     }
     
+    if (accumulated_cloud_pub_.getNumSubscribers() > 0) {
+        pcl::PointCloud<pcl::PointXYZI>::Ptr accumulated_cloud = 
+        accumulator_->getStableCloud();
+        if (!accumulated_cloud->empty()) {
+            sensor_msgs::PointCloud2 accumulated_msg;
+            pcl::toROSMsg(*accumulated_cloud, accumulated_msg);
+            accumulated_msg.header = header;
+            accumulated_cloud_pub_.publish(accumulated_msg);
+        }
+    }
+
+
     // 发布预处理后的点云
     if (preprocessed_cloud_pub_.getNumSubscribers() > 0 && !preprocessed_cloud->empty()) {
         sensor_msgs::PointCloud2 preprocessed_msg;

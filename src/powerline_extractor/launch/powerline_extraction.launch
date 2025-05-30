@@ -27,6 +27,8 @@
   
   <!-- 处理频率 -->
   <arg name="process_frequency" default="2.0"/>
+  <!-- 加载参数文件 -->
+  <rosparam command="load" file="$(find powerline_extractor)/config/accumulator_params.yaml" />
   
   <!-- 启动电力线提取节点 -->
   <node name="powerline_extractor" pkg="powerline_extractor" type="powerline_extractor_node" output="screen">

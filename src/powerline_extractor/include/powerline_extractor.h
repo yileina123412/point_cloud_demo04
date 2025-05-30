@@ -20,6 +20,8 @@
 #include <vector>
 #include <memory>
 
+#include "point_cloud_accumulator.h"
+
 // 前向声明粗提取器
 class PowerlineCoarseExtractor;
 
@@ -33,6 +35,10 @@ private:
     void pointCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg);
     
     // 参数检查和初始化
+
+    // 在现有私有函数中添加
+    void initializeAccumulateCloud();    // 初始化预处理管道
+
     void loadParameters();
     void initializePublishers();
     void initializeSubscribers();
@@ -59,6 +65,11 @@ private:
     ros::NodeHandle private_nh_;
     
     // 订阅器和发布器
+
+    // 在现有发布器后添加
+    ros::Publisher accumulated_cloud_pub_;      // 累积点云发布器（用于调试）
+
+
     ros::Subscriber point_cloud_sub_;
     ros::Publisher original_cloud_pub_;
     ros::Publisher preprocessed_cloud_pub_;
@@ -69,6 +80,9 @@ private:
     // TF变换
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
     std::unique_ptr<tf2_ros::TransformListener> tf_listener_;
+
+    // // 点云累积器
+    std::unique_ptr<PointCloudAccumulator> accumulator_;
     
     // 粗提取器
     std::unique_ptr<PowerlineCoarseExtractor> coarse_extractor_;

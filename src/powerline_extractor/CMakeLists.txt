@@ -32,6 +32,7 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(PCL REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(OpenMP REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -137,6 +138,7 @@ include_directories(
   ${PCL_INCLUDE_DIRS}     #PCL库头文件
   ${EIGEN3_INCLUDE_DIR}
   ${OpenCV_INCLUDE_DIRS}
+  ${OpenMP_INCLUDE_DIRS}
   #系统的标准安装目录
   /usr/local/include # Location when using 'make system_install'
   /usr/include 
@@ -155,6 +157,8 @@ add_library(${PROJECT_NAME}
   src/powerline_extractor.cpp
   src/rough_extraction.cpp
   src/powerline_coarse_extractor.cpp
+  src/point_cloud_accumulator.cpp
+
 )
 
 ## Add cmake target dependencies of the library
@@ -182,6 +186,14 @@ target_link_libraries(${PROJECT_NAME}_node
   ${PCL_LIBRARIES}
   ${OpenCV_LIBRARIES}
 )
+
+
+if(OpenMP_FOUND)
+  target_compile_options(${PROJECT_NAME} PRIVATE ${OpenMP_CXX_FLAGS})
+  target_link_libraries(${PROJECT_NAME}  ${OpenMP_CXX_LIBRARIES})
+  target_compile_options(${PROJECT_NAME}_node PRIVATE ${OpenMP_CXX_FLAGS})
+  target_link_libraries(${PROJECT_NAME}_node  ${OpenMP_CXX_LIBRARIES})
+endif()
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure

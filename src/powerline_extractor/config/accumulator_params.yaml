@@ -1,0 +1,35 @@
+accumulator:
+  # 累积参数
+  accumulation_time: 1       # 累积时间窗口(秒)
+  voxel_size: 0.1              # 累积体素大小(米)
+  stability_threshold: 0.05    # 稳定性阈值(米)
+  min_observations: 3          # 最小观测次数
+  max_vibration_amplitude: 0.1 # 最大抖动幅度(米)
+  
+  # 密度过滤参数
+  search_radius: 0.8           # 密度计算半径(米)
+  density_percentile: 0.25     # 密度过滤百分位数
+
+  voxel_leaf_size: 0.05    #降采样
+
+powerline_preprocessor:
+  # 时间窗口参数
+  accumulation_time: 0.8        # 窗口累积时长(秒)
+  max_history_time: 5.0         # 历史窗口保留时间(秒)
+  min_accumulation_time: 2.4    # 初期累积时间(秒)
+  
+  # 点云管理参数
+  weight_threshold: 0.01        # 权重阈值，用于清理低权重点
+  max_points_per_voxel: 100     # 每个体素的最大点数
+  
+  # 空间参数
+  voxel_size: 0.03              # 体素大小(米)
+  
+  # 抖动检测参数
+  min_points_per_window: 5      # 判断窗口完整性的最小点数
+  min_windows_for_vibration: 3  # 延迟抖动检测的最小窗口数
+  max_vibration_amplitude: 0.015 # 最大抖动幅度(米)
+  
+  # 稳定性参数
+  stability_threshold: 0.02     # 稳定性阈值(米)
+  min_observations: 3           # 最小观测次数

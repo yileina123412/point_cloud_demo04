@@ -111,11 +111,26 @@ powerline_extractor/CMakeFiles/powerline_extractor.dir/src/powerline_coarse_extr
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/powerline_extractor.dir/src/powerline_coarse_extractor.cpp.s"
 	cd /home/furina/cloud_test_project/point_cloud_demo04/build/powerline_extractor && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/src/powerline_coarse_extractor.cpp -o CMakeFiles/powerline_extractor.dir/src/powerline_coarse_extractor.cpp.s
 
+powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o: powerline_extractor/CMakeFiles/powerline_extractor.dir/flags.make
+powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o: /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/src/point_cloud_accumulator.cpp
+powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o: powerline_extractor/CMakeFiles/powerline_extractor.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/furina/cloud_test_project/point_cloud_demo04/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o"
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build/powerline_extractor && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o -MF CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o.d -o CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o -c /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/src/point_cloud_accumulator.cpp
+
+powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.i"
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build/powerline_extractor && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/src/point_cloud_accumulator.cpp > CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.i
+
+powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.s"
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build/powerline_extractor && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/src/point_cloud_accumulator.cpp -o CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.s
+
 # Object files for target powerline_extractor
 powerline_extractor_OBJECTS = \
 "CMakeFiles/powerline_extractor.dir/src/powerline_extractor.cpp.o" \
 "CMakeFiles/powerline_extractor.dir/src/rough_extraction.cpp.o" \
-"CMakeFiles/powerline_extractor.dir/src/powerline_coarse_extractor.cpp.o"
+"CMakeFiles/powerline_extractor.dir/src/powerline_coarse_extractor.cpp.o" \
+"CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o"
 
 # External object files for target powerline_extractor
 powerline_extractor_EXTERNAL_OBJECTS =
@@ -123,6 +138,7 @@ powerline_extractor_EXTERNAL_OBJECTS =
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: powerline_extractor/CMakeFiles/powerline_extractor.dir/src/powerline_extractor.cpp.o
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: powerline_extractor/CMakeFiles/powerline_extractor.dir/src/rough_extraction.cpp.o
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: powerline_extractor/CMakeFiles/powerline_extractor.dir/src/powerline_coarse_extractor.cpp.o
+/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /opt/ros/noetic/lib/libpcl_ros_filter.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /opt/ros/noetic/lib/libpcl_ros_tf.so
@@ -294,6 +310,8 @@ powerline_extractor_EXTERNAL_OBJECTS =
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libopencv_viz.so.4.2.0
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libopencv_xobjdetect.so.4.2.0
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libopencv_xphoto.so.4.2.0
+/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/gcc/x86_64-linux-gnu/9/libgomp.so
+/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libpthread.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libqhull.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libflann_cpp.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /opt/ros/noetic/lib/libdynamic_reconfigure_config_init_mutex.so
@@ -343,11 +361,15 @@ powerline_extractor_EXTERNAL_OBJECTS =
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkIOImage-7.1.so.7.1p.1
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkDICOMParser-7.1.so.7.1p.1
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkmetaio-7.1.so.7.1p.1
+/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libjpeg.so
+/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libpng.so
+/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libtiff.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkRenderingAnnotation-7.1.so.7.1p.1
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkRenderingVolume-7.1.so.7.1p.1
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkIOXML-7.1.so.7.1p.1
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkIOCore-7.1.so.7.1p.1
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkIOXMLParser-7.1.so.7.1p.1
+/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libexpat.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkIOGeometry-7.1.so.7.1p.1
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkIOLegacy-7.1.so.7.1p.1
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libvtkIOPLY-7.1.so.7.1p.1
@@ -375,7 +397,6 @@ powerline_extractor_EXTERNAL_OBJECTS =
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /opt/ros/noetic/lib/libactionlib.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /opt/ros/noetic/lib/libmessage_filters.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /opt/ros/noetic/lib/libroscpp.so
-/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libpthread.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.71.0
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /opt/ros/noetic/lib/librosconsole.so
@@ -394,6 +415,7 @@ powerline_extractor_EXTERNAL_OBJECTS =
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/libOpenNI.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/libOpenNI2.so
+/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/gcc/x86_64-linux-gnu/9/libgomp.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libpcl_surface.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libpcl_keypoints.so
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libpcl_tracking.so
@@ -482,7 +504,7 @@ powerline_extractor_EXTERNAL_OBJECTS =
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.4.2.0
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: /usr/lib/x86_64-linux-gnu/libopencv_core.so.4.2.0
 /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so: powerline_extractor/CMakeFiles/powerline_extractor.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/furina/cloud_test_project/point_cloud_demo04/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX shared library /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/furina/cloud_test_project/point_cloud_demo04/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX shared library /home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so"
 	cd /home/furina/cloud_test_project/point_cloud_demo04/build/powerline_extractor && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/powerline_extractor.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

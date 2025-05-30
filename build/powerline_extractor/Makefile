@@ -1431,6 +1431,30 @@ powerline_extractor_node/fast:
 	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor_node.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor_node.dir/build
 .PHONY : powerline_extractor_node/fast
 
+src/point_cloud_accumulator.o: src/point_cloud_accumulator.cpp.o
+.PHONY : src/point_cloud_accumulator.o
+
+# target to build an object file
+src/point_cloud_accumulator.cpp.o:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o
+.PHONY : src/point_cloud_accumulator.cpp.o
+
+src/point_cloud_accumulator.i: src/point_cloud_accumulator.cpp.i
+.PHONY : src/point_cloud_accumulator.i
+
+# target to preprocess a source file
+src/point_cloud_accumulator.cpp.i:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.i
+.PHONY : src/point_cloud_accumulator.cpp.i
+
+src/point_cloud_accumulator.s: src/point_cloud_accumulator.cpp.s
+.PHONY : src/point_cloud_accumulator.s
+
+# target to generate assembly for a file
+src/point_cloud_accumulator.cpp.s:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.s
+.PHONY : src/point_cloud_accumulator.cpp.s
+
 src/powerline_coarse_extractor.o: src/powerline_coarse_extractor.cpp.o
 .PHONY : src/powerline_coarse_extractor.o
 
@@ -1630,6 +1654,9 @@ help:
 	@echo "... visualization_msgs_generate_messages_py"
 	@echo "... powerline_extractor"
 	@echo "... powerline_extractor_node"
+	@echo "... src/point_cloud_accumulator.o"
+	@echo "... src/point_cloud_accumulator.i"
+	@echo "... src/point_cloud_accumulator.s"
 	@echo "... src/powerline_coarse_extractor.o"
 	@echo "... src/powerline_coarse_extractor.i"
 	@echo "... src/powerline_coarse_extractor.s"

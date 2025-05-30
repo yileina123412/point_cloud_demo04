@@ -6,5 +6,5 @@ CXX_DEFINES = -DDISABLE_LIBUSB_1_0 -DDISABLE_PCAP -DDISABLE_PNG -DROSCONSOLE_BAC
 
 CXX_INCLUDES = -I/home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -isystem /usr/include/vtk-7.1 -isystem /usr/include/freetype2 -isystem /usr/include/eigen3 -isystem /usr/include/pcl-1.10 -isystem /usr/include/ni -isystem /usr/include/openni2 -isystem /usr/include/opencv4
 
-CXX_FLAGS = 
+CXX_FLAGS = -fopenmp
 
