@@ -1,6 +1,8 @@
 #include "powerline_extractor.h"
 
 int main(int argc, char** argv) {
+
+    setlocale(LC_ALL, "");
     ros::init(argc, argv, "powerline_extractor_node");
     ros::NodeHandle nh;
     ros::NodeHandle private_nh("~");

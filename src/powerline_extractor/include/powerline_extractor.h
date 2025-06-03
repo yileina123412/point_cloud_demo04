@@ -22,6 +22,7 @@
 
 #include "point_cloud_accumulator.h"
 #include "pointcloud_accumulator_octree.h"
+#include "power_line_fine_extraction.h"
 
 // 前向声明粗提取器
 class PowerlineCoarseExtractor;
@@ -44,6 +45,7 @@ private:
     void initializePublishers();
     void initializeSubscribers();
     void initializeCoarseExtractor();
+    void initializeFineExtractor();
     
     // 点云变换
     bool transformPointCloud(const sensor_msgs::PointCloud2::ConstPtr& input_msg,
@@ -71,6 +73,8 @@ private:
     ros::Publisher accumulated_cloud_pub_;      // 累积点云发布器（用于调试）
     ros::Publisher octree_accumulated_cloud_pub_;      // octree累积点云发布器（用于调试）
 
+    ros::Publisher fine_extractor_cloud_pub_;      // octree累积点云发布器（用于调试）
+
 
     ros::Subscriber point_cloud_sub_;
     ros::Publisher original_cloud_pub_;
@@ -91,6 +95,9 @@ private:
     
     // 粗提取器
     std::unique_ptr<PowerlineCoarseExtractor> coarse_extractor_;
+
+    //精提取器
+    std::unique_ptr<PowerLineFineExtractor> fine_extractor_;
     
     // 参数
     std::string lidar_topic_;
@@ -123,6 +130,8 @@ private:
     pcl::PointCloud<pcl::PointXYZI>::Ptr non_ground_cloud_;  // 保留用于兼容性，但不使用
     pcl::PointCloud<pcl::PointXYZI>::Ptr powerline_cloud_;
     pcl::PointCloud<pcl::PointXYZI>::Ptr clustered_powerline_cloud_;
+
+    pcl::PointCloud<pcl::PointXYZI>::Ptr fine_extract_cloud_;
     
     // 处理标志
     bool first_cloud_received_;

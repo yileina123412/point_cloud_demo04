@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o.d"
   "CMakeFiles/powerline_extractor.dir/src/pointcloud_accumulator_octree.cpp.o"
   "CMakeFiles/powerline_extractor.dir/src/pointcloud_accumulator_octree.cpp.o.d"
+  "CMakeFiles/powerline_extractor.dir/src/power_line_fine_extraction.cpp.o"
+  "CMakeFiles/powerline_extractor.dir/src/power_line_fine_extraction.cpp.o.d"
   "CMakeFiles/powerline_extractor.dir/src/powerline_coarse_extractor.cpp.o"
   "CMakeFiles/powerline_extractor.dir/src/powerline_coarse_extractor.cpp.o.d"
   "CMakeFiles/powerline_extractor.dir/src/powerline_extractor.cpp.o"

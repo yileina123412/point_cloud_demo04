@@ -37,3 +37,13 @@ powerline_preprocessor:
 octree:
   accumulation_time: 1.2
   voxel_resolution: 0.05
+
+fineextract:
+  # 电力线精细提取参数
+  line_distance_threshold: 0.05      # 直线内点的距离阈值（米）
+  line_min_points: 50              # 形成一条直线的最小点数
+  max_lines: 10                     # 检测的最大直线数量
+  vertical_slice_width: 0.5         # 垂直切片宽度（米）
+  parabola_distance_threshold: 0.1  # 抛物线内点的距离阈值（米）
+  parabola_min_points: 20           # 拟合一条抛物线的最小点数
+  power_line_distance_threshold: 0.1 # 最终电力线点距离阈值（米）
