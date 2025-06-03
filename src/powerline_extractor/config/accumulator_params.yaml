@@ -12,6 +12,16 @@ accumulator:
 
   voxel_leaf_size: 0.1    #降采样
 
+map_bulid:
+  # 地图构建参数
+  voxel_size: 0.1              # 体素网格大小（米）
+  confidence_increment: 0.1     # 观测到静态点时的置信度增量
+  confidence_decay_rate: 0.05   # 未观测时的置信度衰减率（每秒）
+  confidence_threshold: 0.2     # 置信度阈值，低于此值移除点
+  static_accumulation_time: 10.0 # 静态地图初始累积时间（秒）
+  dynamic_detection_window: 1.0  # 动态障碍物检测时间窗口（秒）
+  downsample_factor: 0.5        # 降采样因子（0-1，1表示无降采样）
+
 powerline_preprocessor:
   # 时间窗口参数
   accumulation_time: 0.8        # 窗口累积时长(秒)
@@ -43,7 +53,10 @@ fineextract:
   line_distance_threshold: 0.05      # 直线内点的距离阈值（米）
   line_min_points: 50              # 形成一条直线的最小点数
   max_lines: 10                     # 检测的最大直线数量
-  vertical_slice_width: 0.5         # 垂直切片宽度（米）
+  vertical_slice_width: 0.8         # 垂直切片宽度（米）
   parabola_distance_threshold: 0.1  # 抛物线内点的距离阈值（米）
   parabola_min_points: 20           # 拟合一条抛物线的最小点数
-  power_line_distance_threshold: 0.1 # 最终电力线点距离阈值（米）
+  power_line_distance_threshold: 0.15 # 最终电力线点距离阈值（米）
+
+
+

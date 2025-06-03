@@ -22,6 +22,9 @@
 
 #include "point_cloud_accumulator.h"
 #include "pointcloud_accumulator_octree.h"
+#include "map_builder.h"
+
+
 #include "power_line_fine_extraction.h"
 
 // 前向声明粗提取器
@@ -70,6 +73,10 @@ private:
     // 订阅器和发布器
 
     // 在现有发布器后添加
+
+    ros::Publisher static_cloud_pub_; 
+    ros::Publisher dynamic_cloud_pub_; 
+
     ros::Publisher accumulated_cloud_pub_;      // 累积点云发布器（用于调试）
     ros::Publisher octree_accumulated_cloud_pub_;      // octree累积点云发布器（用于调试）
 
@@ -91,7 +98,8 @@ private:
     std::unique_ptr<PointCloudAccumulator> accumulator_;
     //Octree的点云累计器
     std::unique_ptr<powerline_extractor::PointCloudAccumulatorOctree> octree_accumulator_;
-
+    // map_bulid
+    std::unique_ptr<MapBuilder> map_builder_;
     
     // 粗提取器
     std::unique_ptr<PowerlineCoarseExtractor> coarse_extractor_;
@@ -125,6 +133,10 @@ private:
     double outlier_std_thresh_;
     
     // 点云对象
+
+    pcl::PointCloud<pcl::PointXYZI>::Ptr static_map;
+    pcl::PointCloud<pcl::PointXYZI>::Ptr dynamic_map;
+
     pcl::PointCloud<pcl::PointXYZI>::Ptr original_cloud_;
     pcl::PointCloud<pcl::PointXYZI>::Ptr preprocessed_cloud_;
     pcl::PointCloud<pcl::PointXYZI>::Ptr non_ground_cloud_;  // 保留用于兼容性，但不使用

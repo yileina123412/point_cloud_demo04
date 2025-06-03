@@ -5,6 +5,8 @@ PowerlineExtractor::PowerlineExtractor(ros::NodeHandle& nh, ros::NodeHandle& pri
     : nh_(nh), 
       private_nh_(private_nh),
       first_cloud_received_(false),
+      static_map(new pcl::PointCloud<pcl::PointXYZI>),
+      dynamic_map(new pcl::PointCloud<pcl::PointXYZI>),
       original_cloud_(new pcl::PointCloud<pcl::PointXYZI>()),
       preprocessed_cloud_(new pcl::PointCloud<pcl::PointXYZI>()),
       non_ground_cloud_(new pcl::PointCloud<pcl::PointXYZI>()),
@@ -106,6 +108,9 @@ void PowerlineExtractor::initializeFineExtractor(){
 }
 
 void PowerlineExtractor::initializePublishers() {
+    static_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("static_cloud", 1);
+    dynamic_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("dynamic_cloud", 1);
+
     original_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("original_cloud", 1);
     preprocessed_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("preprocessed_cloud", 1);
     powerline_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("powerline_cloud", 1);
@@ -126,6 +131,8 @@ void PowerlineExtractor::initializeAccumulateCloud()
     accumulator_.reset(new PointCloudAccumulator());
     // 从参数服务器加载参数
     accumulator_->loadParamsFromServer(nh_);
+
+    map_builder_.reset(new MapBuilder());
 
     ROS_INFO("Accumulate Cloud initialized");
 
@@ -165,6 +172,8 @@ void PowerlineExtractor::pointCloudCallback(const sensor_msgs::PointCloud2::Cons
             return;
         }
 
+        map_builder_->processPointCloud(original_cloud_,static_map,dynamic_map);
+
         accumulator_->addPointCloud(original_cloud_, msg->header.stamp);
         // 获取累积的稳定点云
         pcl::PointCloud<pcl::PointXYZI>::Ptr stable_cloud = accumulator_->getStableCloud();
@@ -190,7 +199,7 @@ void PowerlineExtractor::pointCloudCallback(const sensor_msgs::PointCloud2::Cons
         // }
     
 
-        if (!coarse_extractor_->extractPowerlines(stable_cloud, powerline_cloud_)) {
+        if (!coarse_extractor_->extractPowerlines(static_map, powerline_cloud_)) {
             ROS_WARN("Coarse extraction failed, skipping this frame");
             return;
         }
@@ -309,6 +318,21 @@ void PowerlineExtractor::publishPointClouds(const pcl::PointCloud<pcl::PointXYZI
         original_msg.header = header;
         original_cloud_pub_.publish(original_msg);
     }
+
+    if (static_cloud_pub_.getNumSubscribers() > 0 && !static_map->empty()) {
+        sensor_msgs::PointCloud2 static_msg;
+        pcl::toROSMsg(*static_map, static_msg);
+        static_msg.header = header;
+        static_cloud_pub_.publish(static_msg);
+    }
+
+    if (dynamic_cloud_pub_.getNumSubscribers() > 0 && !dynamic_map->empty()) {
+        sensor_msgs::PointCloud2 dynamic_msg;
+        pcl::toROSMsg(*dynamic_map, dynamic_msg);
+        dynamic_msg.header = header;
+        dynamic_cloud_pub_.publish(dynamic_msg);
+    }
+
     
     if (accumulated_cloud_pub_.getNumSubscribers() > 0) {
         pcl::PointCloud<pcl::PointXYZI>::Ptr accumulated_cloud = 

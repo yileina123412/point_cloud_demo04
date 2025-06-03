@@ -160,6 +160,7 @@ add_library(${PROJECT_NAME}
   src/point_cloud_accumulator.cpp
   src/pointcloud_accumulator_octree
   src/power_line_fine_extraction.cpp
+  src/map_builder.cpp
 
 )
 

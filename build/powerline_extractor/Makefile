@@ -1431,6 +1431,30 @@ powerline_extractor_node/fast:
 	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor_node.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor_node.dir/build
 .PHONY : powerline_extractor_node/fast
 
+src/map_builder.o: src/map_builder.cpp.o
+.PHONY : src/map_builder.o
+
+# target to build an object file
+src/map_builder.cpp.o:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/map_builder.cpp.o
+.PHONY : src/map_builder.cpp.o
+
+src/map_builder.i: src/map_builder.cpp.i
+.PHONY : src/map_builder.i
+
+# target to preprocess a source file
+src/map_builder.cpp.i:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/map_builder.cpp.i
+.PHONY : src/map_builder.cpp.i
+
+src/map_builder.s: src/map_builder.cpp.s
+.PHONY : src/map_builder.s
+
+# target to generate assembly for a file
+src/map_builder.cpp.s:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/map_builder.cpp.s
+.PHONY : src/map_builder.cpp.s
+
 src/point_cloud_accumulator.o: src/point_cloud_accumulator.cpp.o
 .PHONY : src/point_cloud_accumulator.o
 
@@ -1702,6 +1726,9 @@ help:
 	@echo "... visualization_msgs_generate_messages_py"
 	@echo "... powerline_extractor"
 	@echo "... powerline_extractor_node"
+	@echo "... src/map_builder.o"
+	@echo "... src/map_builder.i"
+	@echo "... src/map_builder.s"
 	@echo "... src/point_cloud_accumulator.o"
 	@echo "... src/point_cloud_accumulator.i"
 	@echo "... src/point_cloud_accumulator.s"

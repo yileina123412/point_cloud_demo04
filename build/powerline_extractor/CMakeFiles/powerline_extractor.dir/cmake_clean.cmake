@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.pdb"
   "/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so"
+  "CMakeFiles/powerline_extractor.dir/src/map_builder.cpp.o"
+  "CMakeFiles/powerline_extractor.dir/src/map_builder.cpp.o.d"
   "CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o"
   "CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o.d"
   "CMakeFiles/powerline_extractor.dir/src/pointcloud_accumulator_octree.cpp.o"
