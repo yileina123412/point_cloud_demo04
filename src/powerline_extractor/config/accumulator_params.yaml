@@ -1,6 +1,6 @@
 accumulator:
   # 累积参数
-  accumulation_time: 1       # 累积时间窗口(秒)
+  accumulation_time: 10       # 累积时间窗口(秒)
   voxel_size: 0.1              # 累积体素大小(米)
   stability_threshold: 0.05    # 稳定性阈值(米)
   min_observations: 3          # 最小观测次数
@@ -10,7 +10,7 @@ accumulator:
   search_radius: 0.8           # 密度计算半径(米)
   density_percentile: 0.25     # 密度过滤百分位数
 
-  voxel_leaf_size: 0.05    #降采样
+  voxel_leaf_size: 0.1    #降采样
 
 powerline_preprocessor:
   # 时间窗口参数
@@ -33,3 +33,7 @@ powerline_preprocessor:
   # 稳定性参数
   stability_threshold: 0.02     # 稳定性阈值(米)
   min_observations: 3           # 最小观测次数
+
+octree:
+  accumulation_time: 1.2
+  voxel_resolution: 0.05

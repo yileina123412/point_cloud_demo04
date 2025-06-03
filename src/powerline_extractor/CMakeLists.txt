@@ -158,6 +158,7 @@ add_library(${PROJECT_NAME}
   src/rough_extraction.cpp
   src/powerline_coarse_extractor.cpp
   src/point_cloud_accumulator.cpp
+  src/pointcloud_accumulator_octree
 
 )
 

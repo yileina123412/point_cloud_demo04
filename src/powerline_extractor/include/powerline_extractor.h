@@ -21,6 +21,7 @@
 #include <memory>
 
 #include "point_cloud_accumulator.h"
+#include "pointcloud_accumulator_octree.h"
 
 // 前向声明粗提取器
 class PowerlineCoarseExtractor;
@@ -68,6 +69,7 @@ private:
 
     // 在现有发布器后添加
     ros::Publisher accumulated_cloud_pub_;      // 累积点云发布器（用于调试）
+    ros::Publisher octree_accumulated_cloud_pub_;      // octree累积点云发布器（用于调试）
 
 
     ros::Subscriber point_cloud_sub_;
@@ -83,6 +85,9 @@ private:
 
     // // 点云累积器
     std::unique_ptr<PointCloudAccumulator> accumulator_;
+    //Octree的点云累计器
+    std::unique_ptr<powerline_extractor::PointCloudAccumulatorOctree> octree_accumulator_;
+
     
     // 粗提取器
     std::unique_ptr<PowerlineCoarseExtractor> coarse_extractor_;

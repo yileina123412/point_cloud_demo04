@@ -1455,6 +1455,30 @@ src/point_cloud_accumulator.cpp.s:
 	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.s
 .PHONY : src/point_cloud_accumulator.cpp.s
 
+src/pointcloud_accumulator_octree.o: src/pointcloud_accumulator_octree.cpp.o
+.PHONY : src/pointcloud_accumulator_octree.o
+
+# target to build an object file
+src/pointcloud_accumulator_octree.cpp.o:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/pointcloud_accumulator_octree.cpp.o
+.PHONY : src/pointcloud_accumulator_octree.cpp.o
+
+src/pointcloud_accumulator_octree.i: src/pointcloud_accumulator_octree.cpp.i
+.PHONY : src/pointcloud_accumulator_octree.i
+
+# target to preprocess a source file
+src/pointcloud_accumulator_octree.cpp.i:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/pointcloud_accumulator_octree.cpp.i
+.PHONY : src/pointcloud_accumulator_octree.cpp.i
+
+src/pointcloud_accumulator_octree.s: src/pointcloud_accumulator_octree.cpp.s
+.PHONY : src/pointcloud_accumulator_octree.s
+
+# target to generate assembly for a file
+src/pointcloud_accumulator_octree.cpp.s:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/pointcloud_accumulator_octree.cpp.s
+.PHONY : src/pointcloud_accumulator_octree.cpp.s
+
 src/powerline_coarse_extractor.o: src/powerline_coarse_extractor.cpp.o
 .PHONY : src/powerline_coarse_extractor.o
 
@@ -1657,6 +1681,9 @@ help:
 	@echo "... src/point_cloud_accumulator.o"
 	@echo "... src/point_cloud_accumulator.i"
 	@echo "... src/point_cloud_accumulator.s"
+	@echo "... src/pointcloud_accumulator_octree.o"
+	@echo "... src/pointcloud_accumulator_octree.i"
+	@echo "... src/pointcloud_accumulator_octree.s"
 	@echo "... src/powerline_coarse_extractor.o"
 	@echo "... src/powerline_coarse_extractor.i"
 	@echo "... src/powerline_coarse_extractor.s"

@@ -6,7 +6,7 @@
  * 从ROS参数服务器加载参数
  */
 void PointCloudAccumulator::loadParamsFromServer(ros::NodeHandle& nh) {
-    nh.param<double>("accumulator/accumulation_time", accumulation_time_, 0.8);
+    nh.param<double>("accumulator/accumulation_time", accumulation_time_, 1.5);
     nh.param<double>("accumulator/voxel_size", voxel_size_, 0.1);
     nh.param<double>("accumulator/stability_threshold", stability_threshold_, 0.05);
     nh.param<int>("accumulator/min_observations", min_observations_, 3);
@@ -67,12 +67,14 @@ void PointCloudAccumulator::getAccumulateCloud()
 {
     if (!accumulated_cloud) {
         accumulated_cloud.reset(new pcl::PointCloud<pcl::PointXYZI>());
+        accumulated_cloud->clear();
     }
     // 清空 accumulated_cloud
-    accumulated_cloud->clear();
+    // accumulated_cloud->clear();
     // 累积 cloud_buffer_ 中的所有点云
     for (const auto& cloud : cloud_buffer_) {
         *accumulated_cloud += *cloud;
+        ROS_INFO("points number is %ld",accumulated_cloud->size());
     }
     // 使用 VoxelGrid 滤波器降采样
     pcl::VoxelGrid<pcl::PointXYZI> voxel_filter;
@@ -84,6 +86,7 @@ void PointCloudAccumulator::getAccumulateCloud()
 
     // 替换 accumulated_cloud
     *accumulated_cloud = *downsampled_cloud;
+    ROS_INFO("downsampled points number is %ld",accumulated_cloud->size());
 
 }
 

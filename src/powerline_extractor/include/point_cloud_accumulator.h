@@ -77,6 +77,7 @@ public:
         // 添加到缓冲区
         cloud_buffer_.push_back(cloud);
         timestamp_buffer_.push_back(timestamp);
+        ROS_INFO("THE size of cloud_buffer_ is %ld",cloud_buffer_.size());
         
         // 移除超出时间窗口的点云
         cleanOldClouds(timestamp);

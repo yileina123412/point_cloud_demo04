@@ -100,14 +100,19 @@ void PowerlineExtractor::initializePublishers() {
     clustered_powerline_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("clustered_powerline_cloud", 1);
     // 累积点云的发布器
     accumulated_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("accumulated_cloud", 1);
-    
+    //octree累积点云的发布器
+    octree_accumulated_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("octree_accumulated_cloud", 1);
     ROS_INFO("Publishers initialized");
 }
 void PowerlineExtractor::initializeAccumulateCloud()
 {
+    octree_accumulator_.reset(new powerline_extractor::PointCloudAccumulatorOctree(nh_));
+
+    ROS_INFO("Octree Accumulate Cloud initialized");
+
     accumulator_.reset(new PointCloudAccumulator());
     // 从参数服务器加载参数
-    accumulator_->loadParamsFromServer(private_nh_);
+    accumulator_->loadParamsFromServer(nh_);
 
     ROS_INFO("Accumulate Cloud initialized");
 
@@ -155,6 +160,15 @@ void PowerlineExtractor::pointCloudCallback(const sensor_msgs::PointCloud2::Cons
             ROS_WARN("Accumulate cloud returned empty cloud, skipping this frame");
             return;
         }
+
+        // octree_accumulator_->addPointCloud(original_cloud_,msg->header.stamp);
+
+        // pcl::PointCloud<pcl::PointXYZI>::Ptr octree_accumulated_cloud_temp = octree_accumulator_->getAccumulatedCloud();
+        // if(octree_accumulated_cloud_temp->empty()){
+        //     ROS_WARN("Octree Accumulate cloud returned empty cloud, skipping this frame");
+        //     return;
+        // }
+
         
         // 使用粗提取器进行电力线粗提取
         // if (!coarse_extractor_->extractPowerlines(original_cloud_, powerline_cloud_)) {
@@ -290,6 +304,16 @@ void PowerlineExtractor::publishPointClouds(const pcl::PointCloud<pcl::PointXYZI
         }
     }
 
+    // if (octree_accumulated_cloud_pub_.getNumSubscribers() > 0) {
+    //     pcl::PointCloud<pcl::PointXYZI>::Ptr accumulated_cloud = 
+    //     octree_accumulator_->getAccumulatedCloud();
+    //     if (!accumulated_cloud->empty()) {
+    //         sensor_msgs::PointCloud2 accumulated_msg;
+    //         pcl::toROSMsg(*accumulated_cloud, accumulated_msg);
+    //         accumulated_msg.header = header;
+    //         octree_accumulated_cloud_pub_.publish(accumulated_msg);
+    //     }
+    // }
 
     // 发布预处理后的点云
     if (preprocessed_cloud_pub_.getNumSubscribers() > 0 && !preprocessed_cloud->empty()) {
