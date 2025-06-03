@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
   <!-- 雷达相关参数 -->
-  <arg name="lidar_topic" default="/livox/lidar"/>
-  <arg name="lidar_frame" default="livox_frame"/>
+  
+  <arg name="lidar_topic" default="/rslidar_points"/>   <!--/livox/lidar   /rslidar_points  -->
+  <arg name="lidar_frame" default="rslidar"/><!--livox_frame    rslidar -->
   <arg name="target_frame" default="map"/>
   
   <!-- 预处理参数 -->
@@ -63,9 +64,10 @@
   
   <!-- TF静态变换（如果需要的话） -->
   <node pkg="tf2_ros" type="static_transform_publisher" name="lidar_to_map_broadcaster"
-        args="0 0 0 0 -1.5708 0 map livox_frame" />
+        args="0 0 0 0 0 0 $(arg target_frame) $(arg lidar_frame)" />   <!--args="0 0 0 0 -1.5708 0 $(arg target_frame) $(arg lidar_frame)"-->
  
   <!-- RViz可视化 -->
-  <node name="rviz" pkg="rviz" type="rviz" />
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find powerline_extractor)/rvizs/powerlines_extractor.rviz"  />
   
 </launch>

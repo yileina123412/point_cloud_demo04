@@ -38,7 +38,7 @@ void MapBuilder::processPointCloud(const pcl::PointCloud<pcl::PointXYZI>::Ptr& i
     updateStaticMap(input_cloud);
 
     // 更新动态地图
-    updateDynamicMap(input_cloud);
+    // updateDynamicMap(input_cloud);
 
     pcl::PointCloud<pcl::PointXYZI>::Ptr filtered_static_map(new pcl::PointCloud<pcl::PointXYZI>());
     for (const auto& point : static_map_->points) {
@@ -52,7 +52,7 @@ void MapBuilder::processPointCloud(const pcl::PointCloud<pcl::PointXYZI>::Ptr& i
 
     // 输出结果
     *static_map = *static_map_;
-    *dynamic_map = *short_term_map_; // 动态地图直接使用短期累积结果，后续可聚类
+    // *dynamic_map = *short_term_map_; // 动态地图直接使用短期累积结果，后续可聚类
 }
 
 void MapBuilder::updateStaticMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& input_cloud) {
@@ -106,26 +106,27 @@ void MapBuilder::updateStaticMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& inp
 }
 
 void MapBuilder::updateDynamicMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& input_cloud) {
-    // 重置短期累积点云
     short_term_map_->clear();
-
-    // 降采样输入点云
     pcl::PointCloud<pcl::PointXYZI>::Ptr filtered_cloud(new pcl::PointCloud<pcl::PointXYZI>());
     downsampleCloud(input_cloud, filtered_cloud);
 
-    // 检测动态点
     for (const auto& point : filtered_cloud->points) {
         int idx = static_cast<int>(point.x / voxel_size_) * 10000 +
                   static_cast<int>(point.y / voxel_size_) * 100 +
                   static_cast<int>(point.z / voxel_size_);
 
-        // 如果点不在静态地图中或置信度低，认为是动态点
+        // 仅当点不在静态地图中且置信度未积累到一定程度时，视为动态点
         if (voxel_confidence_.find(idx) == voxel_confidence_.end() ||
             voxel_confidence_[idx] < confidence_threshold_) {
-            short_term_map_->points.push_back(point);
+            // 额外检查：如果点在静态地图中已有一定观测历史，则不视为动态点
+            if (voxel_timestamps_.find(idx) == voxel_timestamps_.end() ||
+                (ros::Time::now() - voxel_timestamps_[idx]).toSec() < static_accumulation_time_) {
+                short_term_map_->points.push_back(point);
+            }
         }
     }
 }
+
 
 void MapBuilder::downsampleCloud(const pcl::PointCloud<pcl::PointXYZI>::Ptr& input_cloud,
                                  pcl::PointCloud<pcl::PointXYZI>::Ptr& output_cloud) {

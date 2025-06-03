@@ -15,7 +15,7 @@ accumulator:
 map_bulid:
   # 地图构建参数
   voxel_size: 0.1              # 体素网格大小（米）
-  confidence_increment: 0.1     # 观测到静态点时的置信度增量
+  confidence_increment: 0.3     # 观测到静态点时的置信度增量
   confidence_decay_rate: 0.05   # 未观测时的置信度衰减率（每秒）
   confidence_threshold: 0.2     # 置信度阈值，低于此值移除点
   static_accumulation_time: 10.0 # 静态地图初始累积时间（秒）
