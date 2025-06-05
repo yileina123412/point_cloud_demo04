@@ -3,8 +3,10 @@
 
 powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extractor_node.cpp.o: /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/src/powerline_extractor_node.cpp \
   /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include/map_builder.h \
+  /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include/obstacle_clustering.h \
   /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include/point_cloud_accumulator.h \
   /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include/pointcloud_accumulator_octree.h \
+  /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include/power_line_filter.h \
   /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include/power_line_fine_extraction.h \
   /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include/powerline_extractor.h \
   /opt/ros/noetic/include/geometry_msgs/Point.h \
@@ -91,6 +93,7 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
   /opt/ros/noetic/include/sensor_msgs/PointField.h \
   /opt/ros/noetic/include/sensor_msgs/impl/point_cloud2_iterator.h \
   /opt/ros/noetic/include/sensor_msgs/point_cloud2_iterator.h \
+  /opt/ros/noetic/include/std_msgs/ColorRGBA.h \
   /opt/ros/noetic/include/std_msgs/Empty.h \
   /opt/ros/noetic/include/std_msgs/Header.h \
   /opt/ros/noetic/include/tf/FrameGraph.h \
@@ -128,6 +131,8 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
   /opt/ros/noetic/include/tf2_ros/buffer_interface.h \
   /opt/ros/noetic/include/tf2_ros/transform_listener.h \
   /opt/ros/noetic/include/tf2_sensor_msgs/tf2_sensor_msgs.h \
+  /opt/ros/noetic/include/visualization_msgs/Marker.h \
+  /opt/ros/noetic/include/visualization_msgs/MarkerArray.h \
   /opt/ros/noetic/include/xmlrpcpp/XmlRpcDecl.h \
   /opt/ros/noetic/include/xmlrpcpp/XmlRpcValue.h \
   /usr/include/alloca.h \
@@ -2303,6 +2308,10 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
   /usr/include/pcl-1.10/pcl/conversions.h \
   /usr/include/pcl-1.10/pcl/correspondence.h \
   /usr/include/pcl-1.10/pcl/exceptions.h \
+  /usr/include/pcl-1.10/pcl/features/feature.h \
+  /usr/include/pcl-1.10/pcl/features/impl/feature.hpp \
+  /usr/include/pcl-1.10/pcl/features/moment_of_inertia_estimation.h \
+  /usr/include/pcl-1.10/pcl/features/normal_3d.h \
   /usr/include/pcl-1.10/pcl/filters/boost.h \
   /usr/include/pcl-1.10/pcl/filters/filter.h \
   /usr/include/pcl-1.10/pcl/filters/voxel_grid.h \
@@ -2665,6 +2674,24 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/x86_64-linux-gnu/asm/posix_types_64.h:
 
+/usr/include/wchar.h:
+
+/usr/include/unistd.h:
+
+/usr/include/time.h:
+
+/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
+
+/usr/include/string.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/stdio.h:
+
+/usr/include/stdint.h:
+
+/usr/include/stdc-predef.h:
+
 /usr/include/boost/numeric/conversion/cast.hpp:
 
 /usr/include/boost/fusion/iterator/detail/segment_sequence.hpp:
@@ -2787,12 +2814,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/mpl/int.hpp:
 
-/usr/include/boost/numeric/conversion/conversion_traits.hpp:
-
-/usr/include/boost/mpl/aux_/config/pp_counter.hpp:
-
-/usr/include/pcl-1.10/pcl/io/boost.h:
-
 /usr/include/boost/mpl/insert_range.hpp:
 
 /usr/include/boost/mpl/insert.hpp:
@@ -2810,10 +2831,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/mpl/fold.hpp:
 
 /usr/include/c++/9/bits/hash_bytes.h:
-
-/usr/include/boost/numeric/conversion/converter_policies.hpp:
-
-/usr/include/boost/type_traits/is_union.hpp:
 
 /usr/include/boost/mpl/find_if.hpp:
 
@@ -2952,6 +2969,12 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/numeric/conversion/detail/bounds.hpp:
 
 /usr/include/boost/mpl/aux_/contains_impl.hpp:
+
+/usr/include/boost/mpl/aux_/config/pp_counter.hpp:
+
+/usr/include/boost/numeric/conversion/conversion_traits.hpp:
+
+/usr/include/pcl-1.10/pcl/io/boost.h:
 
 /usr/include/boost/mpl/aux_/config/nttp.hpp:
 
@@ -3269,8 +3292,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/ratio/ratio.hpp:
 
-/usr/include/boost/numeric/conversion/detail/conversion_traits.hpp:
-
 /usr/include/boost/mpl/vector.hpp:
 
 /usr/include/boost/date_time/gregorian/greg_duration.hpp:
@@ -3397,8 +3418,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/core/default_allocator.hpp:
 
-/usr/include/stdint.h:
-
 /usr/include/boost/fusion/view/filter_view/detail/value_of_impl.hpp:
 
 /usr/include/boost/mpl/bind.hpp:
@@ -3406,10 +3425,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/mpl/aux_/config/ttp.hpp:
 
 /usr/include/boost/predef/hardware/simd/ppc/versions.h:
-
-/usr/include/boost/fusion/view/iterator_range.hpp:
-
-/usr/include/boost/predef/os/os400.h:
 
 /usr/include/boost/move/iterator.hpp:
 
@@ -3557,17 +3572,15 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/log4cxx/helpers/objectptr.h:
 
-/usr/include/boost/lexical_cast/detail/is_character.hpp:
+/usr/include/boost/fusion/mpl.hpp:
 
-/usr/include/boost/atomic.hpp:
+/usr/include/boost/predef/os/windows.h:
 
-/usr/include/boost/mpl/bind_fwd.hpp:
+/usr/include/c++/9/cstdarg:
 
-/usr/include/boost/fusion/algorithm/query/find_if_fwd.hpp:
+/usr/include/boost/fusion/iterator/value_of.hpp:
 
-/usr/include/boost/concept/detail/backward_compatibility.hpp:
-
-/usr/include/boost/fusion/container/list/detail/value_at_impl.hpp:
+/usr/include/boost/fusion/iterator/segmented_iterator.hpp:
 
 /usr/include/boost/mpl/aux_/type_wrapper.hpp:
 
@@ -3580,8 +3593,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/thread/detail/make_tuple_indices.hpp:
 
 /usr/include/pcl-1.10/pcl/make_shared.h:
-
-/usr/include/boost/concept/assert.hpp:
 
 /usr/include/boost/mpl/aux_/numeric_cast_utils.hpp:
 
@@ -3679,10 +3690,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseBinaryOps.h:
 
-/usr/include/boost/numeric/conversion/converter.hpp:
-
-/usr/include/eigen3/Eigen/src/SparseCore/ConservativeSparseSparseProduct.h:
-
 /usr/include/boost/mpl/iterator_tags.hpp:
 
 /usr/include/boost/atomic/detail/caps_gcc_atomic.hpp:
@@ -3709,9 +3716,21 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/preprocessor/list/detail/fold_left.hpp:
 
+/usr/include/boost/mpl/aux_/preprocessed/gcc/bind_fwd.hpp:
+
+/usr/include/boost/preprocessor/array/size.hpp:
+
+/usr/include/boost/preprocessor/inc.hpp:
+
+/usr/include/boost/lexical_cast/detail/converter_lexical_streams.hpp:
+
 /usr/include/boost/atomic/detail/lockpool.hpp:
 
 /usr/include/boost/atomic/detail/extra_ops_generic.hpp:
+
+/usr/include/boost/atomic/detail/fp_ops_generic.hpp:
+
+/usr/include/boost/mpl/aux_/has_size.hpp:
 
 /opt/ros/noetic/include/ros/macros.h:
 
@@ -3797,8 +3816,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/iostreams/detail/template_params.hpp:
 
-/usr/include/time.h:
-
 /usr/include/boost/atomic/detail/bitwise_fp_cast.hpp:
 
 /usr/include/boost/lexical_cast/detail/lcast_char_constants.hpp:
@@ -3814,8 +3831,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/mpl/aux_/lambda_arity_param.hpp:
 
 /usr/include/boost/aligned_storage.hpp:
-
-/usr/include/stdlib.h:
 
 /opt/ros/noetic/include/ros/subscription_callback_helper.h:
 
@@ -3886,8 +3901,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /opt/ros/noetic/include/ros/spinner.h:
 
 /opt/ros/noetic/include/geometry_msgs/PointStamped.h:
-
-/usr/include/boost/lexical_cast/detail/converter_lexical_streams.hpp:
 
 /usr/include/boost/fusion/view/filter_view/detail/next_impl.hpp:
 
@@ -3965,6 +3978,12 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedSelfAdjointEigenSolver.h:
 
+/usr/include/boost/atomic.hpp:
+
+/usr/include/boost/mpl/bind_fwd.hpp:
+
+/usr/include/boost/fusion/algorithm/query/find_if_fwd.hpp:
+
 /usr/include/boost/mpl/push_back.hpp:
 
 /usr/include/boost/preprocessor/repetition/repeat.hpp:
@@ -3983,35 +4002,9 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/optional/detail/optional_swap.hpp:
 
-/usr/include/boost/predef/os/amigaos.h:
+/opt/ros/noetic/include/visualization_msgs/MarkerArray.h:
 
-/usr/include/boost/iostreams/detail/is_iterator_range.hpp:
-
-/usr/include/boost/date_time/posix_time/time_parsers.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/confname.h:
-
-/usr/include/boost/mpl/aux_/na_spec.hpp:
-
-/usr/include/boost/thread/detail/move.hpp:
-
-/usr/include/boost/atomic/detail/integral_extend.hpp:
-
-/usr/include/boost/random/poisson_distribution.hpp:
-
-/usr/include/boost/container/detail/std_fwd.hpp:
-
-/usr/include/boost/type_traits/copy_reference.hpp:
-
-/home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/src/powerline_extractor_node.cpp:
-
-/usr/include/boost/config/no_tr1/complex.hpp:
-
-/usr/include/boost/mpl/contains.hpp:
-
-/opt/ros/noetic/include/ros/subscriber.h:
-
-/usr/include/boost/thread/lockable_traits.hpp:
+/usr/include/pcl-1.10/pcl/common/centroid.h:
 
 /usr/include/boost/chrono/detail/system.hpp:
 
@@ -4022,8 +4015,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/pcl-1.10/pcl/common/impl/common.hpp:
 
 /usr/include/boost/mpl/pop_front.hpp:
-
-/opt/ros/noetic/include/ros/serialization.h:
 
 /usr/include/boost/mpl/vector/aux_/back.hpp:
 
@@ -4085,6 +4076,8 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/eigen3/Eigen/src/QR/ColPivHouseholderQR.h:
 
+/opt/ros/noetic/include/ros/serialization.h:
+
 /usr/include/boost/mpl/front_fwd.hpp:
 
 /usr/include/boost/algorithm/string/erase.hpp:
@@ -4094,6 +4087,8 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/date_time/c_time.hpp:
 
 /usr/include/boost/predef.h:
+
+/home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include/power_line_filter.h:
 
 /opt/ros/noetic/include/tf/LinearMath/Vector3.h:
 
@@ -4108,10 +4103,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/fusion/algorithm/transformation/insert.hpp:
 
 /usr/include/boost/bind/mem_fn_cc.hpp:
-
-/usr/include/c++/9/bits/stl_algobase.h:
-
-/usr/include/boost/utility/result_of.hpp:
 
 /usr/include/boost/detail/container_fwd.hpp:
 
@@ -4134,6 +4125,18 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/flann/general.h:
 
 /usr/include/boost/algorithm/string/compare.hpp:
+
+/usr/include/boost/predef/os/amigaos.h:
+
+/usr/include/boost/iostreams/detail/is_iterator_range.hpp:
+
+/usr/include/boost/date_time/posix_time/time_parsers.hpp:
+
+/usr/include/boost/utility/result_of.hpp:
+
+/usr/include/c++/9/bits/stl_algobase.h:
+
+/opt/ros/noetic/include/visualization_msgs/Marker.h:
 
 /opt/ros/noetic/include/ros/datatypes.h:
 
@@ -4203,15 +4206,7 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/predef/compiler/intel.h:
 
-/usr/include/boost/algorithm/string/classification.hpp:
-
 /opt/ros/noetic/include/geometry_msgs/Point32.h:
-
-/usr/include/boost/mpl/begin_end_fwd.hpp:
-
-/usr/include/boost/parameter/aux_/unwrap_cv_reference.hpp:
-
-/usr/include/boost/exception/exception.hpp:
 
 /usr/include/boost/move/detail/config_begin.hpp:
 
@@ -4265,30 +4260,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/algorithm/string/detail/replace_storage.hpp:
 
-/opt/ros/noetic/include/tf/exceptions.h:
-
-/usr/include/eigen3/Eigen/src/Core/CommaInitializer.h:
-
-/usr/include/boost/none_t.hpp:
-
-/usr/include/boost/date_time/posix_time/posix_time_system.hpp:
-
-/usr/include/boost/interprocess/sync/file_lock.hpp:
-
-/usr/include/boost/iostreams/close.hpp:
-
-/usr/include/boost/fusion/container/list/cons_fwd.hpp:
-
-/usr/include/boost/type_traits/has_minus.hpp:
-
-/usr/include/boost/algorithm/string/predicate_facade.hpp:
-
-/usr/include/eigen3/Eigen/src/Core/ConditionEstimator.h:
-
-/usr/include/boost/mpl/aux_/preprocessed/gcc/apply_wrap.hpp:
-
-/usr/include/boost/date_time/date_formatting_locales.hpp:
-
 /usr/include/boost/mpl/bool_fwd.hpp:
 
 /home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include/pointcloud_accumulator_octree.h:
@@ -4302,6 +4273,16 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/predef/platform/windows_phone.h:
 
 /usr/include/boost/type_traits/is_constructible.hpp:
+
+/usr/include/boost/interprocess/sync/file_lock.hpp:
+
+/usr/include/boost/iostreams/close.hpp:
+
+/usr/include/boost/none_t.hpp:
+
+/usr/include/boost/date_time/posix_time/posix_time_system.hpp:
+
+/usr/include/boost/fusion/container/list/cons_fwd.hpp:
 
 /usr/include/boost/config/detail/select_platform_config.hpp:
 
@@ -4423,6 +4404,38 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /opt/ros/noetic/include/ros/timer_options.h:
 
+/usr/include/x86_64-linux-gnu/bits/confname.h:
+
+/usr/include/boost/mpl/aux_/na_spec.hpp:
+
+/usr/include/boost/thread/detail/move.hpp:
+
+/usr/include/boost/atomic/detail/integral_extend.hpp:
+
+/usr/include/boost/random/poisson_distribution.hpp:
+
+/usr/include/boost/container/detail/std_fwd.hpp:
+
+/usr/include/boost/type_traits/copy_reference.hpp:
+
+/home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/src/powerline_extractor_node.cpp:
+
+/usr/include/boost/mpl/begin_end_fwd.hpp:
+
+/usr/include/boost/exception/exception.hpp:
+
+/usr/include/boost/parameter/aux_/unwrap_cv_reference.hpp:
+
+/usr/include/boost/config/no_tr1/complex.hpp:
+
+/usr/include/boost/mpl/contains.hpp:
+
+/opt/ros/noetic/include/ros/subscriber.h:
+
+/usr/include/boost/thread/lockable_traits.hpp:
+
+/opt/ros/noetic/include/ros/console_backend.h:
+
 /usr/include/boost/chrono/clock_string.hpp:
 
 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_pivotL.h:
@@ -4471,7 +4484,19 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/fusion/container/map/map_fwd.hpp:
 
-/opt/ros/noetic/include/ros/console_backend.h:
+/usr/include/boost/type_traits/has_minus.hpp:
+
+/usr/include/boost/algorithm/string/predicate_facade.hpp:
+
+/usr/include/eigen3/Eigen/src/Core/ConditionEstimator.h:
+
+/usr/include/boost/mpl/aux_/preprocessed/gcc/apply_wrap.hpp:
+
+/usr/include/boost/date_time/date_formatting_locales.hpp:
+
+/opt/ros/noetic/include/tf/exceptions.h:
+
+/usr/include/eigen3/Eigen/src/Core/CommaInitializer.h:
 
 /usr/include/boost/preprocessor/variadic/size.hpp:
 
@@ -4483,6 +4508,20 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /opt/ros/noetic/include/ros/service_client.h:
 
+/usr/include/boost/mpl/aux_/arg_typedef.hpp:
+
+/usr/include/c++/9/clocale:
+
+/usr/include/boost/integer/static_log2.hpp:
+
+/usr/include/boost/bind.hpp:
+
+/opt/ros/noetic/include/tf2_ros/buffer_interface.h:
+
+/usr/include/boost/mpl/void.hpp:
+
+/usr/include/c++/9/bits/locale_conv.h:
+
 /usr/include/boost/atomic/detail/type_traits/is_integral.hpp:
 
 /usr/include/eigen3/Eigen/src/Geometry/RotationBase.h:
@@ -4490,6 +4529,14 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/mpl/apply_fwd.hpp:
 
 /usr/include/boost/assert.hpp:
+
+/usr/include/boost/algorithm/string/classification.hpp:
+
+/usr/include/boost/core/explicit_operator_bool.hpp:
+
+/usr/include/c++/9/debug/assertions.h:
+
+/usr/include/boost/parameter/value_type.hpp:
 
 /usr/include/boost/atomic/detail/type_traits/make_signed.hpp:
 
@@ -4540,6 +4587,12 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/fusion/mpl/front.hpp:
 
 /usr/include/boost/filesystem/convenience.hpp:
+
+/usr/include/boost/fusion/view/iterator_range.hpp:
+
+/usr/include/boost/predef/os/os400.h:
+
+/opt/ros/noetic/include/std_msgs/ColorRGBA.h:
 
 /usr/include/boost/fusion/include/mpl.hpp:
 
@@ -4596,14 +4649,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/fusion/adapted/mpl/detail/is_view_impl.hpp:
 
 /usr/include/eigen3/Eigen/src/SparseLU/SparseLU_panel_dfs.h:
-
-/usr/include/boost/concept/detail/concept_undef.hpp:
-
-/usr/include/boost/atomic/detail/type_traits/make_unsigned.hpp:
-
-/usr/include/boost/fusion/container/list/detail/reverse_cons.hpp:
-
-/usr/include/boost/fusion/iterator/segmented_iterator.hpp:
 
 /usr/include/boost/iostreams/detail/config/enable_warnings.hpp:
 
@@ -4683,6 +4728,8 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/lib/gcc/x86_64-linux-gnu/9/include/quadmath.h:
 
+/home/furina/cloud_test_project/point_cloud_demo04/src/powerline_extractor/include/obstacle_clustering.h:
+
 /usr/include/boost/mpl/aux_/preprocessed/gcc/plus.hpp:
 
 /usr/include/boost/detail/select_type.hpp:
@@ -4705,19 +4752,19 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/config/requires_threads.hpp:
 
-/usr/include/boost/mpl/aux_/arg_typedef.hpp:
+/usr/include/boost/lexical_cast/detail/is_character.hpp:
 
-/usr/include/c++/9/clocale:
+/usr/include/boost/concept/assert.hpp:
 
-/usr/include/boost/integer/static_log2.hpp:
+/usr/include/boost/concept/detail/backward_compatibility.hpp:
 
-/usr/include/boost/bind.hpp:
+/usr/include/boost/fusion/container/list/detail/value_at_impl.hpp:
 
-/usr/include/boost/mpl/void.hpp:
+/usr/include/boost/concept/detail/concept_undef.hpp:
 
-/usr/include/c++/9/bits/locale_conv.h:
+/usr/include/boost/atomic/detail/type_traits/make_unsigned.hpp:
 
-/opt/ros/noetic/include/tf2_ros/buffer_interface.h:
+/usr/include/boost/fusion/container/list/detail/reverse_cons.hpp:
 
 /usr/include/boost/concept/detail/general.hpp:
 
@@ -4770,8 +4817,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/c++/9/backward/auto_ptr.h:
 
 /usr/include/pcl-1.10/pcl/io/pcd_io.h:
-
-/usr/include/stdc-predef.h:
 
 /usr/include/boost/config/platform/linux.hpp:
 
@@ -4835,12 +4880,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/signals2/mutex.hpp:
 
-/usr/include/boost/core/explicit_operator_bool.hpp:
-
-/usr/include/c++/9/debug/assertions.h:
-
-/usr/include/boost/parameter/value_type.hpp:
-
 /usr/include/boost/core/first_scalar.hpp:
 
 /usr/include/c++/9/bits/nested_exception.h:
@@ -4879,8 +4918,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/is_placeholder.hpp:
 
-/usr/include/wchar.h:
-
 /usr/include/boost/iostreams/seek.hpp:
 
 /usr/include/boost/mpl/aux_/preprocessor/default_params.hpp:
@@ -4902,6 +4939,10 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /opt/ros/noetic/include/pcl_msgs/ModelCoefficients.h:
 
 /usr/include/boost/date_time/date_clock_device.hpp:
+
+/usr/include/strings.h:
+
+/usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h:
 
 /usr/include/eigen3/Eigen/src/misc/RealSvd2x2.h:
 
@@ -4966,10 +5007,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/interprocess/detail/os_thread_functions.hpp:
 
 /usr/include/boost/iterator/function_output_iterator.hpp:
-
-/usr/include/boost/fusion/view/single_view/detail/distance_impl.hpp:
-
-/usr/include/boost/thread/detail/thread.hpp:
 
 /usr/include/boost/enable_shared_from_this.hpp:
 
@@ -5159,8 +5196,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/iostreams/read.hpp:
 
-/opt/ros/noetic/include/tf2/LinearMath/Vector3.h:
-
 /usr/include/boost/date_time/gregorian/conversion.hpp:
 
 /usr/include/boost/algorithm/string/join.hpp:
@@ -5168,6 +5203,8 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/utility.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/Map.h:
+
+/opt/ros/noetic/include/tf2/LinearMath/Vector3.h:
 
 /opt/ros/noetic/include/tf/tf.h:
 
@@ -5277,12 +5314,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/boost/type_traits/make_signed.hpp:
 
-/usr/include/boost/fusion/mpl.hpp:
-
-/usr/include/boost/predef/os/windows.h:
-
-/usr/include/c++/9/cstdarg:
-
 /usr/include/boost/parameter/aux_/pack/deduced_item.hpp:
 
 /usr/include/boost/iostreams/operations_fwd.hpp:
@@ -5306,6 +5337,12 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/asm-generic/errno-base.h:
 
 /usr/include/boost/fusion/algorithm/transformation/erase_key.hpp:
+
+/usr/include/eigen3/Eigen/src/SparseCore/SparseColEtree.h:
+
+/usr/include/boost/fusion/iterator/value_of_data.hpp:
+
+/usr/include/boost/mpl/aux_/config/bind.hpp:
 
 /usr/include/boost/unordered_map.hpp:
 
@@ -5471,23 +5508,15 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/c++/9/limits:
 
-/usr/include/boost/fusion/iterator/value_of.hpp:
+/usr/include/boost/numeric/conversion/converter.hpp:
 
-/usr/include/boost/mpl/aux_/preprocessed/gcc/bind_fwd.hpp:
+/usr/include/eigen3/Eigen/src/SparseCore/ConservativeSparseSparseProduct.h:
 
-/usr/include/boost/preprocessor/array/size.hpp:
+/usr/include/boost/numeric/conversion/converter_policies.hpp:
 
-/usr/include/boost/preprocessor/inc.hpp:
+/usr/include/boost/type_traits/is_union.hpp:
 
-/usr/include/boost/mpl/aux_/has_size.hpp:
-
-/usr/include/boost/atomic/detail/fp_ops_generic.hpp:
-
-/usr/include/eigen3/Eigen/src/SparseCore/SparseColEtree.h:
-
-/usr/include/boost/mpl/aux_/config/bind.hpp:
-
-/usr/include/boost/fusion/iterator/value_of_data.hpp:
+/usr/include/boost/numeric/conversion/detail/conversion_traits.hpp:
 
 /usr/include/boost/numeric/conversion/detail/converter.hpp:
 
@@ -5512,8 +5541,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/numeric/conversion/detail/numeric_cast_traits.hpp:
 
 /usr/include/boost/numeric/conversion/detail/preprocessed/numeric_cast_traits_long_long.hpp:
-
-/usr/include/unistd.h:
 
 /usr/include/boost/mpl/aux_/preprocessed/gcc/less_equal.hpp:
 
@@ -5762,6 +5789,8 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/mp11/detail/mp_void.hpp:
 
 /usr/include/boost/predef/compiler/hp_acc.h:
+
+/usr/include/pcl-1.10/pcl/features/feature.h:
 
 /usr/include/boost/mpl/greater.hpp:
 
@@ -6953,6 +6982,12 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/c++/9/math.h:
 
+/usr/include/boost/mpl/limits/arity.hpp:
+
+/usr/include/eigen3/Eigen/src/Core/MathFunctions.h:
+
+/usr/include/c++/9/memory:
+
 /usr/include/c++/9/ratio:
 
 /usr/include/pcl-1.10/pcl/Vertices.h:
@@ -7062,12 +7097,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/boost/fusion/view/single_view/single_view_iterator.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/Inverse.h:
-
-/usr/include/boost/mpl/limits/arity.hpp:
-
-/usr/include/c++/9/memory:
-
-/usr/include/eigen3/Eigen/src/Core/MathFunctions.h:
 
 /usr/include/eigen3/Eigen/src/Core/MathFunctionsImpl.h:
 
@@ -7401,8 +7430,6 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 
 /usr/include/pcl-1.10/pcl/TextureMesh.h:
 
-/usr/include/pcl-1.10/pcl/common/centroid.h:
-
 /usr/include/pcl-1.10/pcl/common/concatenate.h:
 
 /usr/include/pcl-1.10/pcl/common/eigen.h:
@@ -7424,6 +7451,16 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/pcl-1.10/pcl/common/transforms.h:
 
 /usr/include/pcl-1.10/pcl/exceptions.h:
+
+/usr/include/pcl-1.10/pcl/features/impl/feature.hpp:
+
+/usr/include/boost/fusion/view/single_view/detail/distance_impl.hpp:
+
+/usr/include/boost/thread/detail/thread.hpp:
+
+/usr/include/pcl-1.10/pcl/features/moment_of_inertia_estimation.h:
+
+/usr/include/pcl-1.10/pcl/features/normal_3d.h:
 
 /usr/include/pcl-1.10/pcl/filters/boost.h:
 
@@ -7468,13 +7505,3 @@ powerline_extractor/CMakeFiles/powerline_extractor_node.dir/src/powerline_extrac
 /usr/include/pcl-1.10/pcl/sample_consensus/sac_model_line.h:
 
 /usr/include/pcl-1.10/pcl/search/organized.h:
-
-/usr/include/stdio.h:
-
-/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
-
-/usr/include/string.h:
-
-/usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h:
-
-/usr/include/strings.h:

@@ -34,6 +34,9 @@ void MapBuilder::loadParameters() {
 void MapBuilder::processPointCloud(const pcl::PointCloud<pcl::PointXYZI>::Ptr& input_cloud,
                                    pcl::PointCloud<pcl::PointXYZI>::Ptr& static_map,
                                    pcl::PointCloud<pcl::PointXYZI>::Ptr& dynamic_map) {
+    // 记录开始时间
+    ros::Time start_time = ros::Time::now();
+
     // 更新静态地图
     updateStaticMap(input_cloud);
 
@@ -53,6 +56,11 @@ void MapBuilder::processPointCloud(const pcl::PointCloud<pcl::PointXYZI>::Ptr& i
     // 输出结果
     *static_map = *static_map_;
     // *dynamic_map = *short_term_map_; // 动态地图直接使用短期累积结果，后续可聚类
+    // 记录结束时间并计算耗时
+    ros::Time end_time = ros::Time::now();
+    double processing_time = (end_time - start_time).toSec();
+    ROS_INFO("构建静态地图耗时: %.4f seconds", processing_time);
+    ROS_INFO("静态地图点云数量:%ld",static_map->size());
 }
 
 void MapBuilder::updateStaticMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& input_cloud) {
@@ -85,6 +93,15 @@ void MapBuilder::updateStaticMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& inp
         // 添加到静态地图
         static_map_->points.push_back(point);
     }
+    
+
+
+    // 滑动窗口：限制点云数量（例如最多保留 10000 个点）
+    // const size_t max_points = 50000;
+    // if (static_map_->points.size() > max_points) {
+    //     static_map_->points.erase(static_map_->points.begin(), 
+    //                               static_map_->points.begin() + (static_map_->points.size() - max_points));
+    // }
 
     // 衰减未观测点的置信度
     for (auto it = voxel_confidence_.begin(); it != voxel_confidence_.end();) {

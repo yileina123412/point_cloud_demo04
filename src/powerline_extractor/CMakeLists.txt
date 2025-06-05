@@ -161,6 +161,8 @@ add_library(${PROJECT_NAME}
   src/pointcloud_accumulator_octree
   src/power_line_fine_extraction.cpp
   src/map_builder.cpp
+  src/power_line_filter.cpp
+  src/obstacle_clustering.cpp
 
 )
 

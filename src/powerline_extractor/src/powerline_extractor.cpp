@@ -5,6 +5,7 @@ PowerlineExtractor::PowerlineExtractor(ros::NodeHandle& nh, ros::NodeHandle& pri
     : nh_(nh), 
       private_nh_(private_nh),
       first_cloud_received_(false),
+      obstacle_cluster_output_cloud(new pcl::PointCloud<pcl::PointXYZI>),
       static_map(new pcl::PointCloud<pcl::PointXYZI>),
       dynamic_map(new pcl::PointCloud<pcl::PointXYZI>),
       original_cloud_(new pcl::PointCloud<pcl::PointXYZI>()),
@@ -12,7 +13,8 @@ PowerlineExtractor::PowerlineExtractor(ros::NodeHandle& nh, ros::NodeHandle& pri
       non_ground_cloud_(new pcl::PointCloud<pcl::PointXYZI>()),
       powerline_cloud_(new pcl::PointCloud<pcl::PointXYZI>()),
       clustered_powerline_cloud_(new pcl::PointCloud<pcl::PointXYZI>()),
-      fine_extract_cloud_(new pcl::PointCloud<pcl::PointXYZI>()) {
+      fine_extract_cloud_(new pcl::PointCloud<pcl::PointXYZI>()),
+      filtered_pc_(new pcl::PointCloud<pcl::PointXYZI>()) {
     
     // 初始化TF
     tf_buffer_ = std::make_unique<tf2_ros::Buffer>();
@@ -97,6 +99,10 @@ void PowerlineExtractor::initializeCoarseExtractor() {
     
     ROS_INFO("Coarse extractor initialized with parameters");
 }
+void PowerlineExtractor::initializeCoarseFilter()
+{
+    coarse_filter_ = std::make_unique<PowerLineFilter>(nh_);
+}
 
 void PowerlineExtractor::initializeFineExtractor(){
 
@@ -108,6 +114,8 @@ void PowerlineExtractor::initializeFineExtractor(){
 }
 
 void PowerlineExtractor::initializePublishers() {
+
+    obstacle_cluster_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("obstacle_cluster_cloud", 1);
     static_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("static_cloud", 1);
     dynamic_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("dynamic_cloud", 1);
 
@@ -115,6 +123,9 @@ void PowerlineExtractor::initializePublishers() {
     preprocessed_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("preprocessed_cloud", 1);
     powerline_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("powerline_cloud", 1);
     clustered_powerline_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("clustered_powerline_cloud", 1);
+
+    //pca粗提取后过滤
+    coarse_filter_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("coarse_filter_cloud", 1);
     // 累积点云的发布器
     accumulated_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("accumulated_cloud", 1);
     //octree累积点云的发布器
@@ -124,6 +135,9 @@ void PowerlineExtractor::initializePublishers() {
 }
 void PowerlineExtractor::initializeAccumulateCloud()
 {
+
+    // 初始化障碍物过滤器
+    obstacle_cluster_.reset(new ObstacleClustering(nh_));
     // octree_accumulator_.reset(new powerline_extractor::PointCloudAccumulatorOctree(nh_));
 
     // ROS_INFO("Octree Accumulate Cloud initialized");
@@ -172,7 +186,10 @@ void PowerlineExtractor::pointCloudCallback(const sensor_msgs::PointCloud2::Cons
             return;
         }
 
-        map_builder_->processPointCloud(original_cloud_,static_map,dynamic_map);
+
+        obstacle_cluster_->process(original_cloud_, obstacle_cluster_output_cloud, excluded_regions);
+
+        map_builder_->processPointCloud(obstacle_cluster_output_cloud,static_map,dynamic_map);
 
         // accumulator_->addPointCloud(original_cloud_, msg->header.stamp);
         // // 获取累积的稳定点云
@@ -210,11 +227,14 @@ void PowerlineExtractor::pointCloudCallback(const sensor_msgs::PointCloud2::Cons
         // 聚类处理
         clusterPowerlines(powerline_cloud_, clustered_powerline_cloud_);
         
+        //对粗提取的pca再次过滤
+        // coarse_filter_->filter(clustered_powerline_cloud_,static_map,filtered_pc_);
+
         // 发布结果
         publishPointClouds(original_cloud_, preprocessed_cloud_, powerline_cloud_, 
                           clustered_powerline_cloud_, transformed_msg.header);
         
-        
+        // 精提取
         fine_extractor_->extractPowerLines(clustered_powerline_cloud_,fine_extract_cloud_);
         
         
@@ -318,6 +338,15 @@ void PowerlineExtractor::publishPointClouds(const pcl::PointCloud<pcl::PointXYZI
         original_msg.header = header;
         original_cloud_pub_.publish(original_msg);
     }
+    if(obstacle_cluster_cloud_pub_.getNumSubscribers() > 0 && !obstacle_cluster_output_cloud->empty()){
+        sensor_msgs::PointCloud2 obstacle_cluster_msg;
+        pcl::toROSMsg(*obstacle_cluster_output_cloud, obstacle_cluster_msg);
+        obstacle_cluster_msg.header = header;
+        obstacle_cluster_cloud_pub_.publish(obstacle_cluster_msg);
+
+    }
+
+
 
     if (static_cloud_pub_.getNumSubscribers() > 0 && !static_map->empty()) {
         sensor_msgs::PointCloud2 static_msg;
@@ -333,28 +362,15 @@ void PowerlineExtractor::publishPointClouds(const pcl::PointCloud<pcl::PointXYZI
         dynamic_cloud_pub_.publish(dynamic_msg);
     }
 
-    
-    // if (accumulated_cloud_pub_.getNumSubscribers() > 0) {
-    //     pcl::PointCloud<pcl::PointXYZI>::Ptr accumulated_cloud = 
-    //     accumulator_->getStableCloud();
-    //     if (!accumulated_cloud->empty()) {
-    //         sensor_msgs::PointCloud2 accumulated_msg;
-    //         pcl::toROSMsg(*accumulated_cloud, accumulated_msg);
-    //         accumulated_msg.header = header;
-    //         accumulated_cloud_pub_.publish(accumulated_msg);
-    //     }
-    // }
+    if(coarse_filter_cloud_pub_.getNumSubscribers() > 0 && !filtered_pc_->empty()){
 
-    // if (octree_accumulated_cloud_pub_.getNumSubscribers() > 0) {
-    //     pcl::PointCloud<pcl::PointXYZI>::Ptr accumulated_cloud = 
-    //     octree_accumulator_->getAccumulatedCloud();
-    //     if (!accumulated_cloud->empty()) {
-    //         sensor_msgs::PointCloud2 accumulated_msg;
-    //         pcl::toROSMsg(*accumulated_cloud, accumulated_msg);
-    //         accumulated_msg.header = header;
-    //         octree_accumulated_cloud_pub_.publish(accumulated_msg);
-    //     }
-    // }
+        sensor_msgs::PointCloud2 filtered_msg;
+        pcl::toROSMsg(*filtered_pc_, filtered_msg);
+        filtered_msg.header = header;
+        coarse_filter_cloud_pub_.publish(filtered_msg);
+
+    }
+    
 
     // 发布预处理后的点云
     if (preprocessed_cloud_pub_.getNumSubscribers() > 0 && !preprocessed_cloud->empty()) {

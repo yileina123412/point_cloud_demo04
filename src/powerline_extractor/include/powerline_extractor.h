@@ -20,10 +20,14 @@
 #include <vector>
 #include <memory>
 
+#include "obstacle_clustering.h"
+
+
 #include "point_cloud_accumulator.h"
 #include "pointcloud_accumulator_octree.h"
 #include "map_builder.h"
 
+#include "power_line_filter.h"
 
 #include "power_line_fine_extraction.h"
 
@@ -48,6 +52,8 @@ private:
     void initializePublishers();
     void initializeSubscribers();
     void initializeCoarseExtractor();
+
+    void initializeCoarseFilter();
     void initializeFineExtractor();
     
     // 点云变换
@@ -73,6 +79,8 @@ private:
     // 订阅器和发布器
 
     // 在现有发布器后添加
+    ros::Publisher obstacle_cluster_cloud_pub_; 
+
 
     ros::Publisher static_cloud_pub_; 
     ros::Publisher dynamic_cloud_pub_; 
@@ -82,6 +90,7 @@ private:
 
     ros::Publisher fine_extractor_cloud_pub_;      // octree累积点云发布器（用于调试）
 
+    ros::Publisher coarse_filter_cloud_pub_;  
 
     ros::Subscriber point_cloud_sub_;
     ros::Publisher original_cloud_pub_;
@@ -94,6 +103,13 @@ private:
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
     std::unique_ptr<tf2_ros::TransformListener> tf_listener_;
 
+    //障碍物提取器
+    std::unique_ptr<ObstacleClustering> obstacle_cluster_;
+
+    pcl::PointCloud<pcl::PointXYZI>::Ptr obstacle_cluster_output_cloud;
+    std::vector<BoundingBox> excluded_regions;
+
+
     // // 点云累积器
     std::unique_ptr<PointCloudAccumulator> accumulator_;
     //Octree的点云累计器
@@ -104,8 +120,13 @@ private:
     // 粗提取器
     std::unique_ptr<PowerlineCoarseExtractor> coarse_extractor_;
 
+    //粗步过滤
+    std::unique_ptr<PowerLineFilter> coarse_filter_;
+
     //精提取器
     std::unique_ptr<PowerLineFineExtractor> fine_extractor_;
+
+    
     
     // 参数
     std::string lidar_topic_;
@@ -142,6 +163,7 @@ private:
     pcl::PointCloud<pcl::PointXYZI>::Ptr non_ground_cloud_;  // 保留用于兼容性，但不使用
     pcl::PointCloud<pcl::PointXYZI>::Ptr powerline_cloud_;
     pcl::PointCloud<pcl::PointXYZI>::Ptr clustered_powerline_cloud_;
+    pcl::PointCloud<pcl::PointXYZI>::Ptr filtered_pc_;
 
     pcl::PointCloud<pcl::PointXYZI>::Ptr fine_extract_cloud_;
     

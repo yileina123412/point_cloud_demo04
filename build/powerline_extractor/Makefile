@@ -1455,6 +1455,30 @@ src/map_builder.cpp.s:
 	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/map_builder.cpp.s
 .PHONY : src/map_builder.cpp.s
 
+src/obstacle_clustering.o: src/obstacle_clustering.cpp.o
+.PHONY : src/obstacle_clustering.o
+
+# target to build an object file
+src/obstacle_clustering.cpp.o:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/obstacle_clustering.cpp.o
+.PHONY : src/obstacle_clustering.cpp.o
+
+src/obstacle_clustering.i: src/obstacle_clustering.cpp.i
+.PHONY : src/obstacle_clustering.i
+
+# target to preprocess a source file
+src/obstacle_clustering.cpp.i:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/obstacle_clustering.cpp.i
+.PHONY : src/obstacle_clustering.cpp.i
+
+src/obstacle_clustering.s: src/obstacle_clustering.cpp.s
+.PHONY : src/obstacle_clustering.s
+
+# target to generate assembly for a file
+src/obstacle_clustering.cpp.s:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/obstacle_clustering.cpp.s
+.PHONY : src/obstacle_clustering.cpp.s
+
 src/point_cloud_accumulator.o: src/point_cloud_accumulator.cpp.o
 .PHONY : src/point_cloud_accumulator.o
 
@@ -1502,6 +1526,30 @@ src/pointcloud_accumulator_octree.s: src/pointcloud_accumulator_octree.cpp.s
 src/pointcloud_accumulator_octree.cpp.s:
 	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/pointcloud_accumulator_octree.cpp.s
 .PHONY : src/pointcloud_accumulator_octree.cpp.s
+
+src/power_line_filter.o: src/power_line_filter.cpp.o
+.PHONY : src/power_line_filter.o
+
+# target to build an object file
+src/power_line_filter.cpp.o:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/power_line_filter.cpp.o
+.PHONY : src/power_line_filter.cpp.o
+
+src/power_line_filter.i: src/power_line_filter.cpp.i
+.PHONY : src/power_line_filter.i
+
+# target to preprocess a source file
+src/power_line_filter.cpp.i:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/power_line_filter.cpp.i
+.PHONY : src/power_line_filter.cpp.i
+
+src/power_line_filter.s: src/power_line_filter.cpp.s
+.PHONY : src/power_line_filter.s
+
+# target to generate assembly for a file
+src/power_line_filter.cpp.s:
+	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(MAKE) $(MAKESILENT) -f powerline_extractor/CMakeFiles/powerline_extractor.dir/build.make powerline_extractor/CMakeFiles/powerline_extractor.dir/src/power_line_filter.cpp.s
+.PHONY : src/power_line_filter.cpp.s
 
 src/power_line_fine_extraction.o: src/power_line_fine_extraction.cpp.o
 .PHONY : src/power_line_fine_extraction.o
@@ -1729,12 +1777,18 @@ help:
 	@echo "... src/map_builder.o"
 	@echo "... src/map_builder.i"
 	@echo "... src/map_builder.s"
+	@echo "... src/obstacle_clustering.o"
+	@echo "... src/obstacle_clustering.i"
+	@echo "... src/obstacle_clustering.s"
 	@echo "... src/point_cloud_accumulator.o"
 	@echo "... src/point_cloud_accumulator.i"
 	@echo "... src/point_cloud_accumulator.s"
 	@echo "... src/pointcloud_accumulator_octree.o"
 	@echo "... src/pointcloud_accumulator_octree.i"
 	@echo "... src/pointcloud_accumulator_octree.s"
+	@echo "... src/power_line_filter.o"
+	@echo "... src/power_line_filter.i"
+	@echo "... src/power_line_filter.s"
 	@echo "... src/power_line_fine_extraction.o"
 	@echo "... src/power_line_fine_extraction.i"
 	@echo "... src/power_line_fine_extraction.s"

@@ -97,30 +97,7 @@ void PowerLineFineExtractor::projectToPlane(const pcl::PointCloud<pcl::PointXYZI
 
 void PowerLineFineExtractor::detectLinesRANSAC(const pcl::PointCloud<pcl::PointXY>::Ptr& projected_cloud,
     std::vector<Eigen::VectorXf>& line_models) {
-    // pcl::PointCloud<pcl::PointXY>::Ptr cloud_copy(new pcl::PointCloud<pcl::PointXY>(*projected_cloud));
-    // while (cloud_copy->size() > static_cast<size_t>(line_min_points_) && line_models.size() < static_cast<size_t>(max_lines_)) {
-    // pcl::SampleConsensusModelLine<pcl::PointXY>::Ptr model(
-    // new pcl::SampleConsensusModelLine<pcl::PointXY>(cloud_copy));
-    // pcl::RandomSampleConsensus<pcl::PointXY> ransac(model);
-    // ransac.setDistanceThreshold(line_distance_threshold_);
-    // ransac.computeModel();
 
-    // std::vector<int> inliers;
-    // ransac.getInliers(inliers);
-    // if (inliers.size() < static_cast<size_t>(line_min_points_)) break;
-
-    // // 使用 Eigen::VectorXf 接收系数
-    // Eigen::VectorXf coefficients;
-    // ransac.getModelCoefficients(coefficients);
-    // line_models.push_back(coefficients);
-
-    // // 移除内点
-    // pcl::ExtractIndices<pcl::PointXY> extract;
-    // extract.setInputCloud(cloud_copy);
-    // extract.setIndices(boost::make_shared<std::vector<int>>(inliers));
-    // extract.setNegative(true);
-    // extract.filter(*cloud_copy);
-    // }
     pcl::PointCloud<pcl::PointXY>::Ptr cloud_copy(new pcl::PointCloud<pcl::PointXY>(*projected_cloud));
     std::random_device rd;
     std::mt19937 gen(rd());
