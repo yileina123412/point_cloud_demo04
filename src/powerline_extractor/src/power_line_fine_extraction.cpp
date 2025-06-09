@@ -1,6 +1,10 @@
 #include "power_line_fine_extraction.h"
 #include <pcl/filters/extract_indices.h>
 #include <random>
+#include <chrono>  // 添加 chrono 头文件
+#include <omp.h>  // 添加 OpenMP 头文件
+
+// thread_local std::mt19937 gen(std::random_device{}());
 
 PowerLineFineExtractor::PowerLineFineExtractor(ros::NodeHandle& nh) {
     // 从ROS参数服务器读取参数（通过launch文件从YAML文件加载）
@@ -24,6 +28,10 @@ PowerLineFineExtractor::PowerLineFineExtractor(ros::NodeHandle& nh) {
 
 void PowerLineFineExtractor::extractPowerLines(const pcl::PointCloud<pcl::PointXYZI>::Ptr& input_cloud,
     pcl::PointCloud<pcl::PointXYZI>::Ptr& output_cloud) {
+
+    // 记录开始时间
+    auto start = std::chrono::high_resolution_clock::now();
+    
     // 计算PCA
     Eigen::Matrix3f eigenvectors;
     Eigen::Vector3f eigenvalues, centroid;
@@ -58,6 +66,11 @@ void PowerLineFineExtractor::extractPowerLines(const pcl::PointCloud<pcl::PointX
     output_cloud->width = output_cloud->size();
     output_cloud->height = 1;
     output_cloud->is_dense = true;
+
+    // 记录结束时间并计算耗时
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    ROS_INFO("精提取电力线 执行时间: %f 秒", duration.count());
 }
 
 
@@ -71,10 +84,10 @@ void PowerLineFineExtractor::computePCA(const pcl::PointCloud<pcl::PointXYZI>::P
     eigenvalues = pca.getEigenValues();
     centroid = pca.getMean().head<3>();
     // 添加ROS_INFO
-    ROS_INFO("PCA计算完成：");
-    ROS_INFO("  输入点云点数: %zu", cloud->size());
-    ROS_INFO("  特征值: %f, %f, %f", eigenvalues[0], eigenvalues[1], eigenvalues[2]);
-    ROS_INFO("  质心: (%f, %f, %f)", centroid[0], centroid[1], centroid[2]);
+    // ROS_INFO("PCA计算完成：");
+    // ROS_INFO("  输入点云点数: %zu", cloud->size());
+    // ROS_INFO("  特征值: %f, %f, %f", eigenvalues[0], eigenvalues[1], eigenvalues[2]);
+    // ROS_INFO("  质心: (%f, %f, %f)", centroid[0], centroid[1], centroid[2]);
 }
 
 void PowerLineFineExtractor::projectToPlane(const pcl::PointCloud<pcl::PointXYZI>::Ptr& cloud,
@@ -84,12 +97,17 @@ void PowerLineFineExtractor::projectToPlane(const pcl::PointCloud<pcl::PointXYZI
     Eigen::Vector3f e1 = eigenvectors.col(0); // 最大方差
     Eigen::Vector3f e2 = eigenvectors.col(1); // 次大方差
     projected_cloud->clear();
-    for (const auto& pt : *cloud) {
+    projected_cloud->resize(cloud->size());  // 预分配内存，避免线程竞争
+
+    // #pragma omp parallel for
+    // for (const auto& pt : *cloud) {
+    for (size_t i = 0; i < cloud->size(); ++i) {
+        const auto& pt = cloud->points[i];
         Eigen::Vector3f p(pt.x - centroid[0], pt.y - centroid[1], pt.z - centroid[2]);
         pcl::PointXY p2d;
         p2d.x = p.dot(e1);
         p2d.y = p.dot(e2);
-        projected_cloud->push_back(p2d);
+        projected_cloud->points[i] = p2d;  // 每个线程写入独立位置
     }
     // 添加ROS_INFO
     ROS_INFO("投影后2D点云点数: %zu", projected_cloud->size());
@@ -134,14 +152,19 @@ void PowerLineFineExtractor::detectLinesRANSAC(const pcl::PointCloud<pcl::PointX
             coefficients << p1.x, p1.y, dx, dy;
 
             // 计算内点
-            std::vector<int> inliers;
+            std::vector<bool> is_inlier(cloud_copy->size(), false);
+            // #pragma omp parallel for
             for (size_t i = 0; i < cloud_copy->size(); ++i) {
                 pcl::PointXY pt = cloud_copy->points[i];
                 // 点到直线的距离
                 float distance = fabs((pt.x - p1.x) * dy - (pt.y - p1.y) * dx);
                 if (distance < line_distance_threshold_) {
-                    inliers.push_back(i);
+                    is_inlier[i] = true;
                 }
+            }
+            std::vector<int> inliers;
+            for (size_t i = 0; i < is_inlier.size(); ++i) {
+                if (is_inlier[i]) inliers.push_back(i);
             }
 
             if (inliers.size() > max_inliers) {
@@ -189,10 +212,11 @@ void PowerLineFineExtractor::extractVerticalSlice(const pcl::PointCloud<pcl::Poi
     Eigen::Vector3f plane_normal = line_dir_3d.cross(vertical_dir).normalized();
 
     // 调试输出
-    ROS_INFO("3D参考点 p0_3d: (%f, %f, %f)", p0_3d[0], p0_3d[1], p0_3d[2]);
-    ROS_INFO("直线参数: x0=%f, y0=%f, dx=%f, dy=%f", line_model[0], line_model[1], line_model[2], line_model[3]);
-    ROS_INFO("剖面宽度: %f", width);
+    // ROS_INFO("3D参考点 p0_3d: (%f, %f, %f)", p0_3d[0], p0_3d[1], p0_3d[2]);
+    // ROS_INFO("直线参数: x0=%f, y0=%f, dx=%f, dy=%f", line_model[0], line_model[1], line_model[2], line_model[3]);
+    // ROS_INFO("剖面宽度: %f", width);
 
+    //最初的方法
     slice_cloud->clear();
     for (const auto& pt : *cloud) {
         Eigen::Vector3f p(pt.x, pt.y, pt.z);
@@ -201,6 +225,30 @@ void PowerLineFineExtractor::extractVerticalSlice(const pcl::PointCloud<pcl::Poi
             slice_cloud->push_back(pt);
         }
     }
+    //并行计算
+    // std::vector<int> indices;
+    // #pragma omp parallel
+    // {
+    //     std::vector<int> local_indices; // 每个线程的私有索引容器
+    //     #pragma omp for nowait
+    //     for (size_t i = 0; i < cloud->size(); ++i) {
+    //         const auto& pt = cloud->points[i];
+    //         Eigen::Vector3f p(pt.x, pt.y, pt.z);
+    //         double distance = fabs((p - p0_3d).dot(plane_normal));
+    //         if (distance < width / 2.0) {
+    //             local_indices.push_back(i);
+    //         }
+    //     }
+    //     #pragma omp critical
+    //     {
+    //         indices.insert(indices.end(), local_indices.begin(), local_indices.end());
+    //     }
+    // }
+    // pcl::copyPointCloud(*cloud, indices, *slice_cloud);
+
+
+
+
     ROS_INFO("提取的垂直剖面点云点数: %zu", slice_cloud->size());
 }
 

@@ -20,12 +20,11 @@
 #include <vector>
 #include <memory>
 
+#include "point_cloud_preprocessor.h"
+#include "power_line_coarse_extractor_s.h"
+
+
 #include "obstacle_clustering.h"
-
-
-#include "point_cloud_accumulator.h"
-#include "pointcloud_accumulator_octree.h"
-#include "map_builder.h"
 
 #include "power_line_filter.h"
 
@@ -79,19 +78,12 @@ private:
     // 订阅器和发布器
 
     // 在现有发布器后添加
+    ros::Publisher preprocessor_cloud_pub_;    //预处理后的点云
+    ros::Publisher extractor_s_cloud_pub_;    //粗提取_s后的点云
+
     ros::Publisher obstacle_cluster_cloud_pub_; 
-
-
-    ros::Publisher static_cloud_pub_; 
-    ros::Publisher dynamic_cloud_pub_; 
-
-    ros::Publisher accumulated_cloud_pub_;      // 累积点云发布器（用于调试）
-    ros::Publisher octree_accumulated_cloud_pub_;      // octree累积点云发布器（用于调试）
-
     ros::Publisher fine_extractor_cloud_pub_;      // octree累积点云发布器（用于调试）
-
     ros::Publisher coarse_filter_cloud_pub_;  
-
     ros::Subscriber point_cloud_sub_;
     ros::Publisher original_cloud_pub_;
     ros::Publisher preprocessed_cloud_pub_;
@@ -103,6 +95,18 @@ private:
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
     std::unique_ptr<tf2_ros::TransformListener> tf_listener_;
 
+
+    //点云数据预处理
+    std::unique_ptr<PointCloudPreprocessor> preprocessor_;  //实例化类
+    pcl::PointCloud<pcl::PointXYZI>::Ptr preprocessor__output_cloud_;  //输出预处理后的点云
+    // pcl::octree::OctreePointCloudChangeDetector<pcl::PointXYZI>& octree_;  //输出的octree     octree = preprocessor.getOctree();
+
+    //粗提取_s
+    std::unique_ptr<PowerLineExtractor> extractor_s_; 
+    pcl::PointCloud<pcl::PointXYZI>::Ptr extractor_s__output_cloud_;
+
+
+
     //障碍物提取器
     std::unique_ptr<ObstacleClustering> obstacle_cluster_;
 
@@ -110,12 +114,10 @@ private:
     std::vector<BoundingBox> excluded_regions;
 
 
-    // // 点云累积器
-    std::unique_ptr<PointCloudAccumulator> accumulator_;
-    //Octree的点云累计器
-    std::unique_ptr<powerline_extractor::PointCloudAccumulatorOctree> octree_accumulator_;
-    // map_bulid
-    std::unique_ptr<MapBuilder> map_builder_;
+
+
+
+
     
     // 粗提取器
     std::unique_ptr<PowerlineCoarseExtractor> coarse_extractor_;
@@ -155,8 +157,6 @@ private:
     
     // 点云对象
 
-    pcl::PointCloud<pcl::PointXYZI>::Ptr static_map;
-    pcl::PointCloud<pcl::PointXYZI>::Ptr dynamic_map;
 
     pcl::PointCloud<pcl::PointXYZI>::Ptr original_cloud_;
     pcl::PointCloud<pcl::PointXYZI>::Ptr preprocessed_cloud_;

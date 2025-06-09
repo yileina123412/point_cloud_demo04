@@ -50,18 +50,18 @@ void ObstacleClustering::process(const pcl::PointCloud<pcl::PointXYZI>::Ptr& inp
     // cropped_cloud->is_dense = true;
 
     // 并行化裁剪
-    #pragma omp parallel
+    // #pragma omp parallel
     {
         // 局部变量也使用相同的分配器
         std::vector<pcl::PointXYZI, Eigen::aligned_allocator<pcl::PointXYZI>> local_points;
-        #pragma omp for nowait
+        // #pragma omp for nowait
         for (size_t i = 0; i < input_cloud->points.size(); ++i) {
             const auto& point = input_cloud->points[i];
             if (std::abs(point.x) <= 35.0 && std::abs(point.y) <= 35.0 && std::abs(point.z) <= 35.0) {
                 local_points.push_back(point);
             }
         }
-        #pragma omp critical
+        // #pragma omp critical
         {
             temp_points.insert(temp_points.end(), local_points.begin(), local_points.end());
         }
@@ -110,7 +110,7 @@ void ObstacleClustering::extractFeatures(const pcl::PointCloud<pcl::PointXYZI>::
 is_building.resize(cluster_indices.size(), false);
 excluded_regions.clear();
 
-#pragma omp parallel for
+// #pragma omp parallel for
 for (size_t i = 0; i < cluster_indices.size(); ++i) {
 pcl::PointCloud<pcl::PointXYZI>::Ptr cluster(new pcl::PointCloud<pcl::PointXYZI>);
 pcl::ExtractIndices<pcl::PointXYZI> extract;
@@ -153,7 +153,7 @@ bbox.z_min = min_pt.z;
 bbox.x_max = max_pt.x;
 bbox.y_max = max_pt.y;
 bbox.z_max = max_pt.z;
-#pragma omp critical
+// #pragma omp critical
 {
 excluded_regions.push_back(bbox);
 }

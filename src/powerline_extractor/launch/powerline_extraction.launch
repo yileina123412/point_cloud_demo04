@@ -15,7 +15,7 @@
   
   <!-- PCA电力线粗提取参数 -->
   <arg name="pca_radius" default="0.5"/>
-  <arg name="linearity_threshold" default="0.7"/>
+  <arg name="linearity_threshold" default="0.6"/>
   
   <!-- 聚类参数 -->
   <arg name="cluster_tolerance" default="2.0"/>

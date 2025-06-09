@@ -1,4 +1,23 @@
 
+preprocessor:
+  cube_size: 70.0          # 立方体边长（米）
+  octree_resolution: 0.1   # Octree 分辨率（米）
+  voxel_leaf_size: 0.1     # 降采样体素大小（米）
+
+
+power_line_coarse_extractor_s:
+  linearity_threshold: 0.7    # 线型度阈值
+  curvature_threshold: 0.2    # 曲率阈值
+  planarity_threshold: 0.1    # 平面度阈值（可选）
+  use_planarity: false        # 是否启用平面度检查
+  cluster_tolerance: 1.0      # 聚类距离阈值（米）
+  min_cluster_size: 3        # 最小点数
+  variance_threshold: 0.1   # 法向量方差阈值
+  search_radius: 0.5    # 邻域搜索半径（米）
+  min_cluster_length: 0.1 # 最小簇长度（米）
+
+
+
 obstacle_clustering:
   eps: 0.2                # DBSCAN 邻域半径
   min_samples: 5         # DBSCAN 最小点数
@@ -32,7 +51,7 @@ map_bulid:
   confidence_increment: 0.3     # 观测到静态点时的置信度增量
   confidence_decay_rate: 0.2   # 未观测时的置信度衰减率（每秒）
   confidence_threshold: 0.2     # 置信度阈值，低于此值移除点
-  static_accumulation_time: 5.0 # 静态地图初始累积时间（秒）
+  static_accumulation_time: 10.0 # 静态地图初始累积时间（秒）
   dynamic_detection_window: 1.0  # 动态障碍物检测时间窗口（秒）
   downsample_factor: 2.0        # 降采样因子（0-1，1表示无降采样）
 
@@ -65,9 +84,9 @@ octree:
 fineextract:
   # 电力线精细提取参数
   line_distance_threshold: 0.08      # 直线内点的距离阈值（米）
-  line_min_points: 30              # 形成一条直线的最小点数
+  line_min_points: 20              # 形成一条直线的最小点数
   max_lines: 10                     # 检测的最大直线数量
-  vertical_slice_width: 0.5         # 垂直切片宽度（米）
+  vertical_slice_width: 0.3         # 垂直切片宽度（米）
   parabola_distance_threshold: 0.1  # 抛物线内点的距离阈值（米）
   parabola_min_points: 15           # 拟合一条抛物线的最小点数
   power_line_distance_threshold: 0.15 # 最终电力线点距离阈值（米）

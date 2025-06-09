@@ -1,0 +1,58 @@
+#ifndef POWER_LINE_EXTRACTOR_H_S
+#define POWER_LINE_EXTRACTOR_H_S
+
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/octree/octree_pointcloud_changedetector.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/kdtree/kdtree_flann.h>
+#include <ros/ros.h>
+#include "point_cloud_preprocessor.h"
+
+class PowerLineExtractor {
+public:
+    PowerLineExtractor(ros::NodeHandle& nh);
+    void extractPowerLines(const std::unique_ptr<PointCloudPreprocessor>& preprocessor);
+    void extractPowerLinesByPoints(const std::unique_ptr<PointCloudPreprocessor>& preprocessor_ptr);
+
+    pcl::PointCloud<pcl::PointXYZI>::Ptr getExtractedCloud() const;
+
+private:
+    void loadParameters(ros::NodeHandle& nh);
+    void manualClustering(const pcl::PointCloud<pcl::PointXYZI>::Ptr& cloud,
+                          std::vector<pcl::PointIndices>& cluster_indices,
+                          double tolerance, int min_size);
+
+    // 新增辅助函数声明
+    bool isPowerLinePoint(const pcl::PointCloud<pcl::PointXYZI>::Ptr& cloud,
+        const pcl::PointCloud<pcl::Normal>::Ptr& normals,
+        int index);
+    // 新增函数：滤除较短的簇
+    void filterShortClusters(const pcl::PointCloud<pcl::PointXYZI>::Ptr& cloud,
+        std::vector<pcl::PointIndices>& cluster_indices,
+        double min_length);
+    // 参数
+    double linearity_threshold_;
+    double curvature_threshold_;
+    double planarity_threshold_;
+    bool use_planarity_;
+    double cluster_tolerance_;
+    int min_cluster_size_;
+
+    // 新增参数
+    double variance_threshold_;
+    double search_radius_;
+
+    // 新增参数
+    double min_cluster_length_;
+
+
+    // PCL 对象
+    pcl::NormalEstimation<pcl::PointXYZI, pcl::Normal> normal_estimation_;
+    pcl::search::KdTree<pcl::PointXYZI>::Ptr kdtree_;
+
+    // 提取后的点云
+    pcl::PointCloud<pcl::PointXYZI>::Ptr extracted_cloud_;
+};
+
+#endif // POWER_LINE_EXTRACTOR_H
