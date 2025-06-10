@@ -2,10 +2,13 @@
 #include <Eigen/Dense>
 #include <queue>
 
-PowerLineExtractor::PowerLineExtractor(ros::NodeHandle& nh) : extracted_cloud_(new pcl::PointCloud<pcl::PointXYZI>) {
+PowerLineExtractor::PowerLineExtractor(ros::NodeHandle& nh) : nh_(nh),extracted_cloud_(new pcl::PointCloud<pcl::PointXYZI>) {
     loadParameters(nh);
     normal_estimation_.setRadiusSearch(0.5);
     kdtree_.reset(new pcl::search::KdTree<pcl::PointXYZI>);
+    pub_linearity_ = nh_.advertise<sensor_msgs::PointCloud2>("linearity_cloud", 1);
+    pub_curvature_ = nh_.advertise<sensor_msgs::PointCloud2>("curvature_cloud", 1);
+    pub_variance_ = nh_.advertise<sensor_msgs::PointCloud2>("variance_cloud", 1);
 }
 
 void PowerLineExtractor::loadParameters(ros::NodeHandle& nh) {
@@ -230,7 +233,7 @@ bool PowerLineExtractor::isPowerLinePoint(const pcl::PointCloud<pcl::PointXYZI>:
     if (eigenvalues[0] < 1e-6) return false; // 避免除以零
 
     float linearity = (eigenvalues[0] - eigenvalues[1]) / eigenvalues[0];
-    float curvature = eigenvalues[2] / (eigenvalues[0] + eigenvalues[1] + eigenvalues[2]);
+    float curvature = (eigenvalues[2] + eigenvalues[1])/ (eigenvalues[0] + eigenvalues[1] + eigenvalues[2]);
 
     // 计算法向量一致性
     Eigen::Vector3f mean_normal(0, 0, 0);
@@ -250,7 +253,9 @@ bool PowerLineExtractor::isPowerLinePoint(const pcl::PointCloud<pcl::PointXYZI>:
     variance /= neighbors.size();
 
     // 筛选条件
-    return linearity > linearity_threshold_ && curvature < curvature_threshold_ && variance > variance_threshold_;
+    // return linearity > linearity_threshold_ && curvature < curvature_threshold_ && variance > variance_threshold_;
+    return linearity > linearity_threshold_ && curvature < curvature_threshold_;
+
 }
 
 void PowerLineExtractor::filterShortClusters(const pcl::PointCloud<pcl::PointXYZI>::Ptr& cloud,
@@ -282,4 +287,130 @@ filtered_indices.push_back(cluster);
 }
 }
 cluster_indices = filtered_indices;
+}
+
+
+// // 可视化函数实现
+
+
+void PowerLineExtractor::visualizeParameters(const std::unique_ptr<PointCloudPreprocessor>& preprocessor_ptr) {
+    auto cloud = preprocessor_ptr->getProcessedCloud();
+    if (cloud->empty()) {
+        ROS_WARN("Input point cloud is empty!");
+        return;
+    }
+    kdtree_->setInputCloud(cloud);
+
+    pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);
+    normal_estimation_.setInputCloud(cloud);
+    normal_estimation_.setSearchMethod(kdtree_);
+    normal_estimation_.setRadiusSearch(search_radius_);
+    normal_estimation_.compute(*normals);
+
+    std::vector<float> linearity_values(cloud->size(), 0.0f);
+    std::vector<float> curvature_values(cloud->size(), 0.0f);
+    std::vector<float> variance_values(cloud->size(), 0.0f);
+
+    for (size_t i = 0; i < cloud->points.size(); ++i) {
+        std::vector<int> neighbors;
+        std::vector<float> distances;
+        kdtree_->radiusSearch(i, search_radius_, neighbors, distances);
+        if (neighbors.size() < 3) continue;
+
+        pcl::PointCloud<pcl::PointXYZI>::Ptr local_cloud(new pcl::PointCloud<pcl::PointXYZI>);
+        for (int idx : neighbors) local_cloud->points.push_back(cloud->points[idx]);
+
+        Eigen::Vector4f centroid;
+        pcl::compute3DCentroid(*local_cloud, centroid);
+        Eigen::Matrix3f covariance;
+        pcl::computeCovarianceMatrix(*local_cloud, centroid, covariance);
+        Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> eigen_solver(covariance);
+        Eigen::Vector3f eigenvalues = eigen_solver.eigenvalues();
+        std::sort(eigenvalues.data(), eigenvalues.data() + 3, std::greater<float>());
+        if (eigenvalues[0] < 1e-6) continue;
+
+        linearity_values[i] = (eigenvalues[0] - eigenvalues[1]) / eigenvalues[0];
+        curvature_values[i] = (eigenvalues[2]+eigenvalues[1]) / (eigenvalues[0] + eigenvalues[1] + eigenvalues[2]);
+
+        Eigen::Vector3f mean_normal(0, 0, 0);
+        for (int idx : neighbors) {
+            mean_normal += Eigen::Vector3f(normals->points[idx].normal_x, normals->points[idx].normal_y, normals->points[idx].normal_z);
+        }
+        mean_normal /= neighbors.size();
+        float variance = 0;
+        for (int idx : neighbors) {
+            Eigen::Vector3f diff = Eigen::Vector3f(normals->points[idx].normal_x, normals->points[idx].normal_y, normals->points[idx].normal_z) - mean_normal;
+            variance += diff.squaredNorm();
+        }
+        variance /= neighbors.size();
+        variance_values[i] = variance;
+    }
+
+    auto valueToColor = [](float value, float min_val, float max_val) -> uint32_t {
+        float normalized = (value - min_val) / (max_val - min_val);
+        normalized = std::max(0.0f, std::min(1.0f, normalized)); // 限制在 0-1 范围内
+        uint8_t r = static_cast<uint8_t>(255 * normalized);      // 红色分量
+        uint8_t g = 0;                                           // 绿色分量
+        uint8_t b = static_cast<uint8_t>(255 * (1 - normalized)); // 蓝色分量
+        return (r << 16) | (g << 8) | b;                         // 组合成 RGB 值
+    };
+    float min_curvature = *std::min_element(curvature_values.begin(), curvature_values.end());
+    float max_curvature = *std::max_element(curvature_values.begin(), curvature_values.end());
+    if (max_curvature <= min_curvature) max_curvature = min_curvature + 1e-6;
+    ROS_INFO("Curvature range: min = %f, max = %f", min_curvature, max_curvature);
+
+    std::vector<float> log_variance_values(cloud->size());
+    for (size_t i = 0; i < variance_values.size(); ++i) log_variance_values[i] = std::log1p(variance_values[i]);
+    float min_log_variance = *std::min_element(log_variance_values.begin(), log_variance_values.end());
+    float max_log_variance = *std::max_element(log_variance_values.begin(), log_variance_values.end());
+    if (max_log_variance <= min_log_variance) max_log_variance = min_log_variance + 1e-6;
+    ROS_INFO("Log Variance range: min = %f, max = %f", min_log_variance, max_log_variance);
+
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr linearity_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr curvature_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr variance_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+    for (size_t i = 0; i < cloud->points.size(); ++i) {
+        pcl::PointXYZRGB point;
+        point.x = cloud->points[i].x;
+        point.y = cloud->points[i].y;
+        point.z = cloud->points[i].z;
+        
+        uint32_t color = valueToColor(linearity_values[i], 0.0f, 1.0f);
+        point.rgb = *reinterpret_cast<float*>(&color);
+        linearity_cloud->points.push_back(point);
+
+        color = valueToColor(curvature_values[i], min_curvature, max_curvature);
+        point.rgb = *reinterpret_cast<float*>(&color);
+        curvature_cloud->points.push_back(point);
+
+        color = valueToColor(log_variance_values[i], min_log_variance, max_log_variance);
+        point.rgb = *reinterpret_cast<float*>(&color);
+        variance_cloud->points.push_back(point);
+    }
+
+    linearity_cloud->width = linearity_cloud->points.size();
+    linearity_cloud->height = 1;
+    curvature_cloud->width = curvature_cloud->points.size();
+    curvature_cloud->height = 1;
+    variance_cloud->width = variance_cloud->points.size();
+    variance_cloud->height = 1;
+
+    
+
+    sensor_msgs::PointCloud2 output;
+    pcl::toROSMsg(*linearity_cloud, output);
+    output.header.frame_id = "map";
+    output.header.stamp = ros::Time::now();
+    pub_linearity_.publish(output);
+
+    pcl::toROSMsg(*curvature_cloud, output);
+    output.header.frame_id = "map";
+    output.header.stamp = ros::Time::now();
+    pub_curvature_.publish(output);
+
+    pcl::toROSMsg(*variance_cloud, output);
+    output.header.frame_id = "map";
+    output.header.stamp = ros::Time::now();
+    pub_variance_.publish(output);
 }

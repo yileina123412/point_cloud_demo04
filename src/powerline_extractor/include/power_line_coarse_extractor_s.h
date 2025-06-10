@@ -6,6 +6,9 @@
 #include <pcl/octree/octree_pointcloud_changedetector.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/kdtree/kdtree_flann.h>
+#include <sensor_msgs/PointCloud2.h>
+#include <pcl_conversions/pcl_conversions.h>
+#include <memory>
 #include <ros/ros.h>
 #include "point_cloud_preprocessor.h"
 
@@ -14,8 +17,11 @@ public:
     PowerLineExtractor(ros::NodeHandle& nh);
     void extractPowerLines(const std::unique_ptr<PointCloudPreprocessor>& preprocessor);
     void extractPowerLinesByPoints(const std::unique_ptr<PointCloudPreprocessor>& preprocessor_ptr);
-
     pcl::PointCloud<pcl::PointXYZI>::Ptr getExtractedCloud() const;
+
+    // 新增可视化函数
+    void visualizeParameters(const std::unique_ptr<PointCloudPreprocessor>& preprocessor_ptr);
+
 
 private:
     void loadParameters(ros::NodeHandle& nh);
@@ -31,6 +37,12 @@ private:
     void filterShortClusters(const pcl::PointCloud<pcl::PointXYZI>::Ptr& cloud,
         std::vector<pcl::PointIndices>& cluster_indices,
         double min_length);
+
+
+    //pub
+    ros::Publisher pub_linearity_;
+    ros::Publisher pub_curvature_;
+    ros::Publisher pub_variance_;
     // 参数
     double linearity_threshold_;
     double curvature_threshold_;
@@ -53,6 +65,8 @@ private:
 
     // 提取后的点云
     pcl::PointCloud<pcl::PointXYZI>::Ptr extracted_cloud_;
+    // ROS NodeHandle 用于发布
+    ros::NodeHandle& nh_;
 };
 
 #endif // POWER_LINE_EXTRACTOR_H

@@ -7,14 +7,14 @@ preprocessor:
 
 power_line_coarse_extractor_s:
   linearity_threshold: 0.7    # 线型度阈值
-  curvature_threshold: 0.2    # 曲率阈值
+  curvature_threshold: 0.3    # 曲率阈值
   planarity_threshold: 0.1    # 平面度阈值（可选）
   use_planarity: false        # 是否启用平面度检查
-  cluster_tolerance: 1.0      # 聚类距离阈值（米）
-  min_cluster_size: 3        # 最小点数
+  cluster_tolerance: 0.3      # 聚类距离阈值（米）
+  min_cluster_size: 10        # 最小点数
   variance_threshold: 0.1   # 法向量方差阈值
-  search_radius: 0.5    # 邻域搜索半径（米）
-  min_cluster_length: 0.1 # 最小簇长度（米）
+  search_radius: 0.3    # 邻域搜索半径（米）
+  min_cluster_length: 0.3 # 最小簇长度（米）
 
 
 

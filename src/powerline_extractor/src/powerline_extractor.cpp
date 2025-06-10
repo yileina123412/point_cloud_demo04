@@ -189,6 +189,7 @@ void PowerlineExtractor::pointCloudCallback(const sensor_msgs::PointCloud2::Cons
         extractor_s_->extractPowerLinesByPoints(preprocessor_);
         extractor_s__output_cloud_ = extractor_s_->getExtractedCloud();
         ROS_INFO("extractor_s__output_cloud_ 粗提取_s: %ld",extractor_s__output_cloud_->size());
+        // extractor_s_->visualizeParameters(preprocessor_);
 
 
         // obstacle_cluster_->process(original_cloud_, obstacle_cluster_output_cloud, excluded_regions);
@@ -222,7 +223,7 @@ void PowerlineExtractor::pointCloudCallback(const sensor_msgs::PointCloud2::Cons
                           clustered_powerline_cloud_, transformed_msg.header);
         
         // 精提取
-        // fine_extractor_->extractPowerLines(clustered_powerline_cloud_,fine_extract_cloud_);
+        fine_extractor_->extractPowerLines(extractor_s__output_cloud_,fine_extract_cloud_);
         
         
         // 获取并打印统计信息
@@ -346,7 +347,6 @@ void PowerlineExtractor::publishPointClouds(const pcl::PointCloud<pcl::PointXYZI
         temp_msg.header = header;
         extractor_s_cloud_pub_.publish(temp_msg);
     }
-
 
 
     if(coarse_filter_cloud_pub_.getNumSubscribers() > 0 && !filtered_pc_->empty()){
