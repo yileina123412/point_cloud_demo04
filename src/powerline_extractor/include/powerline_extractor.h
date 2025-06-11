@@ -30,6 +30,8 @@
 
 #include "power_line_fine_extraction.h"
 
+#include "obstacle_analyzer.h"
+
 // 前向声明粗提取器
 class PowerlineCoarseExtractor;
 
@@ -89,6 +91,11 @@ private:
     ros::Publisher preprocessed_cloud_pub_;
     ros::Publisher powerline_cloud_pub_;
     ros::Publisher clustered_powerline_cloud_pub_;
+
+
+    ros::Publisher obb_marker_pub;
+
+    ros::Publisher powerlines_distance_cloud_pub_;
     // 注意：移除了non_ground_cloud_pub_，因为不再进行地面点移除
     
     // TF变换
@@ -104,6 +111,10 @@ private:
     //粗提取_s
     std::unique_ptr<PowerLineExtractor> extractor_s_; 
     pcl::PointCloud<pcl::PointXYZI>::Ptr extractor_s__output_cloud_;
+
+    //距离可视化
+    std::unique_ptr<ObstacleAnalyzer> analyzer_; 
+    std::vector<OrientedBoundingBox> obbs_;
 
 
 

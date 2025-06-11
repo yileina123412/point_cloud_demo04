@@ -165,6 +165,8 @@ add_library(${PROJECT_NAME}
   src/obstacle_clustering.cpp
   src/point_cloud_preprocessor.cpp
   src/power_line_coarse_extractor_s.cpp
+  src/obstacle_analyzer.cpp
+  
 
 )
 

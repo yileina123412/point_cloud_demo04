@@ -15,6 +15,14 @@ PowerLineFineExtractor::PowerLineFineExtractor(ros::NodeHandle& nh) {
     nh.param("fineextract/parabola_distance_threshold", parabola_distance_threshold_, 0.1);
     nh.param("fineextract/parabola_min_points", parabola_min_points_, 50);
     nh.param("fineextract/power_line_distance_threshold", power_line_distance_threshold_, 0.1);
+    nh.param("fineextract/angle_threshold", angle_threshold_, 0.99);            // 默认 0.99（约 8 度）
+    nh.param("fineextract/distance_threshold", distance_threshold_, 1.0);       // 默认 1.0 米
+    nh.param("fineextract/min_parallel_lines", min_parallel_lines_, 2);         // 默认 2
+     // 新增参数加载
+    nh.param("fineextract/min_line_length", min_line_length_, 0.3); // 默认 5.0 米
+    nh.param("fineextract/dbscan_epsilon", dbscan_epsilon_, 0.5);       // 默认 0.5 米
+    nh.param("fineextract/dbscan_min_points", dbscan_min_points_, 10);  // 默认 10
+    nh.param("fineextract/cluster_min_points", cluster_min_points_, 50); // 默认 50
 
     ROS_INFO("PowerLineFineExtractor 初始化参数如下：");
     ROS_INFO("直线距离阈值: %f", line_distance_threshold_);
@@ -24,6 +32,15 @@ PowerLineFineExtractor::PowerLineFineExtractor(ros::NodeHandle& nh) {
     ROS_INFO("抛物线距离阈值: %f", parabola_distance_threshold_);
     ROS_INFO("抛物线最小点数: %d", parabola_min_points_);
     ROS_INFO("电力线距离阈值: %f", power_line_distance_threshold_);
+    ROS_INFO("方向夹角阈值: %f", angle_threshold_);
+    ROS_INFO("直线间距离阈值: %f", distance_threshold_);
+    ROS_INFO("最小平行直线数量: %d", min_parallel_lines_);
+    ROS_INFO("最小直线长度: %f", min_line_length_); // 输出新参数
+    // 输出新参数
+    ROS_INFO("DBSCAN 邻域半径: %f", dbscan_epsilon_);
+    ROS_INFO("DBSCAN 最小邻域点数: %d", dbscan_min_points_);
+    ROS_INFO("聚类簇最小点数: %d", cluster_min_points_);
+    
 }
 
 void PowerLineFineExtractor::extractPowerLines(const pcl::PointCloud<pcl::PointXYZI>::Ptr& input_cloud,
@@ -45,9 +62,13 @@ void PowerLineFineExtractor::extractPowerLines(const pcl::PointCloud<pcl::PointX
     std::vector<Eigen::VectorXf> line_models; // 类型改为 Eigen::VectorXf
     detectLinesRANSAC(projected_cloud, line_models);
 
+     // 新增：过滤平行直线
+     std::vector<Eigen::VectorXf> filtered_line_models;
+     filterParallelLines(line_models, filtered_line_models, angle_threshold_, distance_threshold_, min_parallel_lines_);
+
     // 为每条直线提取并拟合抛物线
     output_cloud->clear();
-    for (const auto& line_model : line_models) {
+    for (const auto& line_model : filtered_line_models) {
     pcl::PointCloud<pcl::PointXYZI>::Ptr slice_cloud(new pcl::PointCloud<pcl::PointXYZI>);
     extractVerticalSlice(input_cloud, line_model, eigenvectors, vertical_slice_width_, slice_cloud,centroid);
 
@@ -66,6 +87,35 @@ void PowerLineFineExtractor::extractPowerLines(const pcl::PointCloud<pcl::PointX
     output_cloud->width = output_cloud->size();
     output_cloud->height = 1;
     output_cloud->is_dense = true;
+
+
+    // 新增：应用密度聚类并过滤小簇
+    if (output_cloud->size() > 0) {
+        pcl::search::KdTree<pcl::PointXYZI>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZI>());
+        tree->setInputCloud(output_cloud);
+
+        std::vector<pcl::PointIndices> cluster_indices;
+        pcl::EuclideanClusterExtraction<pcl::PointXYZI> ec;
+        ec.setClusterTolerance(dbscan_epsilon_);
+        ec.setMinClusterSize(dbscan_min_points_);
+        ec.setSearchMethod(tree);
+        ec.setInputCloud(output_cloud);
+        ec.extract(cluster_indices);
+
+        pcl::PointCloud<pcl::PointXYZI>::Ptr filtered_cloud(new pcl::PointCloud<pcl::PointXYZI>());
+        for (const auto& indices : cluster_indices) {
+            if (indices.indices.size() >= static_cast<size_t>(cluster_min_points_)) {
+                for (int idx : indices.indices) {
+                    filtered_cloud->push_back(output_cloud->points[idx]);
+                }
+            }
+        }
+
+        *output_cloud = *filtered_cloud;
+        output_cloud->width = output_cloud->size();
+        output_cloud->height = 1;
+        output_cloud->is_dense = true;
+    }
 
     // 记录结束时间并计算耗时
     auto end = std::chrono::high_resolution_clock::now();
@@ -174,7 +224,11 @@ void PowerLineFineExtractor::detectLinesRANSAC(const pcl::PointCloud<pcl::PointX
             }
         }
 
+        
+
         if (max_inliers < static_cast<size_t>(line_min_points_)) break;
+
+        
 
         line_models.push_back(best_coefficients);
 
@@ -334,4 +388,44 @@ void PowerLineFineExtractor::fitParabolasRANSAC(const pcl::PointCloud<pcl::Point
     }
       // 函数末尾输出总结
       ROS_INFO("抛物线拟合完成，共拟合 %zu 条抛物线", inlier_indices.size());
+}
+
+
+
+void PowerLineFineExtractor::filterParallelLines(const std::vector<Eigen::VectorXf>& line_models,
+    std::vector<Eigen::VectorXf>& filtered_line_models,
+    double angle_threshold, double distance_threshold, int min_parallel_lines) {
+    filtered_line_models.clear();
+
+    for (size_t i = 0; i < line_models.size(); ++i) {
+    const Eigen::VectorXf& line_i = line_models[i];
+    float dx_i = line_i[2], dy_i = line_i[3];  // 方向向量
+    float x0_i = line_i[0], y0_i = line_i[1];  // 直线上的点
+    int parallel_count = 0;
+
+    for (size_t j = 0; j < line_models.size(); ++j) {
+    if (i == j) continue;  // 跳过自身
+
+    const Eigen::VectorXf& line_j = line_models[j];
+    float dx_j = line_j[2], dy_j = line_j[3];
+    float x0_j = line_j[0], y0_j = line_j[1];
+
+    // 计算方向向量的点积
+    float dot = fabs(dx_i * dx_j + dy_i * dy_j);
+    if (dot < angle_threshold) continue;  // 方向不相似
+
+    // 计算点到直线的距离
+    float dist = fabs((x0_i - x0_j) * dy_j - (y0_i - y0_j) * dx_j);
+    if (dist < distance_threshold) {
+    parallel_count++;
+    }
+    }
+
+    // 如果平行直线数量满足条件，保留该直线
+    if (parallel_count >= min_parallel_lines) {
+    filtered_line_models.push_back(line_i);
+    }
+    }
+
+    ROS_INFO("过滤后保留 %zu 条直线（平行直线数量 >= %d）", filtered_line_models.size(), min_parallel_lines);
 }

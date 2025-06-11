@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/powerline_extractor/powerline_extractor_node"
-  "/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/powerline_extractor/powerline_extractor_node.pdb"
+  "/home/furina/power_line_extractor/point_cloud_demo04/devel/lib/powerline_extractor/powerline_extractor_node"
+  "/home/furina/power_line_extractor/point_cloud_demo04/devel/lib/powerline_extractor/powerline_extractor_node.pdb"
   "CMakeFiles/powerline_extractor_node.dir/src/powerline_extractor_node.cpp.o"
   "CMakeFiles/powerline_extractor_node.dir/src/powerline_extractor_node.cpp.o.d"
 )

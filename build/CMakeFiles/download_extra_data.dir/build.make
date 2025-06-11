@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/furina/cloud_test_project/point_cloud_demo04/src
+CMAKE_SOURCE_DIR = /home/furina/power_line_extractor/point_cloud_demo04/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/furina/cloud_test_project/point_cloud_demo04/build
+CMAKE_BINARY_DIR = /home/furina/power_line_extractor/point_cloud_demo04/build
 
 # Utility rule file for download_extra_data.
 
@@ -78,6 +78,6 @@ CMakeFiles/download_extra_data.dir/clean:
 .PHONY : CMakeFiles/download_extra_data.dir/clean
 
 CMakeFiles/download_extra_data.dir/depend:
-	cd /home/furina/cloud_test_project/point_cloud_demo04/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/furina/cloud_test_project/point_cloud_demo04/src /home/furina/cloud_test_project/point_cloud_demo04/src /home/furina/cloud_test_project/point_cloud_demo04/build /home/furina/cloud_test_project/point_cloud_demo04/build /home/furina/cloud_test_project/point_cloud_demo04/build/CMakeFiles/download_extra_data.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/furina/power_line_extractor/point_cloud_demo04/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/furina/power_line_extractor/point_cloud_demo04/src /home/furina/power_line_extractor/point_cloud_demo04/src /home/furina/power_line_extractor/point_cloud_demo04/build /home/furina/power_line_extractor/point_cloud_demo04/build /home/furina/power_line_extractor/point_cloud_demo04/build/CMakeFiles/download_extra_data.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/download_extra_data.dir/depend
 

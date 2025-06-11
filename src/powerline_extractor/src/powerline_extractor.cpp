@@ -116,7 +116,12 @@ void PowerlineExtractor::initializeFineExtractor(){
 void PowerlineExtractor::initializePublishers() {
 
     preprocessor_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("preprocessor_cloud", 1);
+    powerlines_distance_cloud_pub_ = private_nh_.advertise<visualization_msgs::MarkerArray>("powerlines_distance_cloud", 1);
+
     extractor_s_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("extractor_s_cloud", 1);
+
+    obb_marker_pub = nh_.advertise<visualization_msgs::MarkerArray>("obb_marker", 10);
+
 
 
     obstacle_cluster_cloud_pub_ = private_nh_.advertise<sensor_msgs::PointCloud2>("obstacle_cluster_cloud", 1);
@@ -137,9 +142,12 @@ void PowerlineExtractor::initializePublishers() {
 void PowerlineExtractor::initializeAccumulateCloud()
 {
     //点云数据预处理
-    preprocessor_.reset(new PointCloudPreprocessor());
+    preprocessor_.reset(new PointCloudPreprocessor(nh_));
     //粗提取_s
     extractor_s_.reset(new PowerLineExtractor(nh_));
+
+    //可视化距离
+    analyzer_.reset(new ObstacleAnalyzer(nh_));
 
     // 初始化障碍物过滤器
     obstacle_cluster_.reset(new ObstacleClustering(nh_));
@@ -224,6 +232,12 @@ void PowerlineExtractor::pointCloudCallback(const sensor_msgs::PointCloud2::Cons
         
         // 精提取
         fine_extractor_->extractPowerLines(extractor_s__output_cloud_,fine_extract_cloud_);
+
+        analyzer_->analyzeObstacles(preprocessor__output_cloud_, fine_extract_cloud_, obbs_);
+            //发布距离可视化
+        analyzer_->publishObbMarkers(obbs_, obb_marker_pub, "map");
+        analyzer_->publishPowerlineDistanceMarkers(fine_extract_cloud_,powerlines_distance_cloud_pub_,"map");
+
         
         
         // 获取并打印统计信息

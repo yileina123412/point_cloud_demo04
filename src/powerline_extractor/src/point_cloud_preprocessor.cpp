@@ -1,12 +1,12 @@
 #include "point_cloud_preprocessor.h"
 
-PointCloudPreprocessor::PointCloudPreprocessor()
+PointCloudPreprocessor::PointCloudPreprocessor(ros::NodeHandle& nh)
     : octree_(0.1), processed_cloud_(new pcl::PointCloud<pcl::PointXYZI>) {
-    loadParameters();
+    loadParameters(nh);
 }
 
-void PointCloudPreprocessor::loadParameters() {
-    ros::NodeHandle nh("~");
+void PointCloudPreprocessor::loadParameters(ros::NodeHandle& nh) {
+    
     nh.param("preprocessor/cube_size", cube_size_, 70.0);
     nh.param("preprocessor/octree_resolution", octree_resolution_, 0.1);
     nh.param("preprocessor/voxel_leaf_size", voxel_leaf_size_, 0.1);

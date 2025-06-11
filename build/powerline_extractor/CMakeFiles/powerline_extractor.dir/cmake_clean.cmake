@@ -1,8 +1,10 @@
 file(REMOVE_RECURSE
-  "/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.pdb"
-  "/home/furina/cloud_test_project/point_cloud_demo04/devel/lib/libpowerline_extractor.so"
+  "/home/furina/power_line_extractor/point_cloud_demo04/devel/lib/libpowerline_extractor.pdb"
+  "/home/furina/power_line_extractor/point_cloud_demo04/devel/lib/libpowerline_extractor.so"
   "CMakeFiles/powerline_extractor.dir/src/map_builder.cpp.o"
   "CMakeFiles/powerline_extractor.dir/src/map_builder.cpp.o.d"
+  "CMakeFiles/powerline_extractor.dir/src/obstacle_analyzer.cpp.o"
+  "CMakeFiles/powerline_extractor.dir/src/obstacle_analyzer.cpp.o.d"
   "CMakeFiles/powerline_extractor.dir/src/obstacle_clustering.cpp.o"
   "CMakeFiles/powerline_extractor.dir/src/obstacle_clustering.cpp.o.d"
   "CMakeFiles/powerline_extractor.dir/src/point_cloud_accumulator.cpp.o"

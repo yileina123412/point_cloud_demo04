@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/furina/cloud_test_project/point_cloud_demo04/install")
+  set(CMAKE_INSTALL_PREFIX "/home/furina/power_line_extractor/point_cloud_demo04/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

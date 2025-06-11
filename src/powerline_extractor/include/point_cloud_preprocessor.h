@@ -26,7 +26,7 @@ Octree 处理：使用 pcl::octree::OctreePointCloudChangeDetector 检测变化�
 class PointCloudPreprocessor {
 public:
     // 构造函数，初始化参数和成员
-    PointCloudPreprocessor();
+    PointCloudPreprocessor(ros::NodeHandle& nh);
 
     // 处理点云的接口
     void processPointCloud(const pcl::PointCloud<pcl::PointXYZI>::ConstPtr& input_cloud);
@@ -39,7 +39,7 @@ public:
 
 private:
     // 加载参数
-    void loadParameters();
+    void loadParameters(ros::NodeHandle& nh);
 
     // 剪切点云
     void cropPointCloud(const pcl::PointCloud<pcl::PointXYZI>::ConstPtr& input_cloud,

@@ -5,8 +5,11 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/common/pca.h>
+#include <pcl/common/common.h>  
 #include <pcl/sample_consensus/ransac.h>
 #include <pcl/sample_consensus/sac_model_line.h>
+#include <pcl/segmentation/extract_clusters.h>
+#include <pcl/search/kdtree.h>     
 #include <Eigen/Dense>
 
 class PowerLineFineExtractor {
@@ -27,6 +30,18 @@ private:
     double parabola_distance_threshold_; // 抛物线内点的距离阈值
     int parabola_min_points_;           // 拟合一条抛物线的最小点数
     double power_line_distance_threshold_; // 最终电力线点距离阈值
+
+    double angle_threshold_;         // 新增：方向夹角阈值
+    double distance_threshold_;      // 新增：直线间距离阈值
+    int min_parallel_lines_;         // 新增：最小平行直线数量
+    // 新增参数
+    double min_line_length_; // 最小直线长度（单位：米）
+
+    // 新增密度聚类参数
+    double dbscan_epsilon_;        // DBSCAN 邻域半径
+    int dbscan_min_points_;        // DBSCAN 最小邻域点数
+    int cluster_min_points_;       // 聚类簇的最小点数
+
 
     // 辅助方法
     void computePCA(const pcl::PointCloud<pcl::PointXYZI>::Ptr& cloud,
@@ -57,6 +72,10 @@ private:
                             const Eigen::Vector3f& line_dir,
                             const Eigen::Vector3f& vertical_dir,
                             std::vector<std::vector<int>>& inlier_indices);
+    // 新增方法声明
+    void filterParallelLines(const std::vector<Eigen::VectorXf>& line_models,
+        std::vector<Eigen::VectorXf>& filtered_line_models,
+        double angle_threshold, double distance_threshold, int min_parallel_lines);
 };
 
 #endif // POWER_LINE_FINE_EXTRACTION_H

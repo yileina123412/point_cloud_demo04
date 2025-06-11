@@ -1,4 +1,4 @@
-prefix=/home/furina/cloud_test_project/point_cloud_demo04/install
+prefix=/home/furina/power_line_extractor/point_cloud_demo04/install
 
 Name: powerline_extractor
 Description: Description of powerline_extractor

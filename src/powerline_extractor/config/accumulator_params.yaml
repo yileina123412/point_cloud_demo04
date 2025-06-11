@@ -2,7 +2,7 @@
 preprocessor:
   cube_size: 70.0          # 立方体边长（米）
   octree_resolution: 0.1   # Octree 分辨率（米）
-  voxel_leaf_size: 0.1     # 降采样体素大小（米）
+  voxel_leaf_size: 0.11     # 降采样体素大小（米）
 
 
 power_line_coarse_extractor_s:
@@ -90,6 +90,13 @@ fineextract:
   parabola_distance_threshold: 0.1  # 抛物线内点的距离阈值（米）
   parabola_min_points: 15           # 拟合一条抛物线的最小点数
   power_line_distance_threshold: 0.15 # 最终电力线点距离阈值（米）
+  angle_threshold: 0.99   #方向夹角阈值 默认 0.99（约 8 度）
+  distance_threshold: 3.0   #直线间距离阈值
+  min_parallel_lines: 2   #最小平行直线数量
+  min_line_length: 0.3   #最小直线长度
+  dbscan_epsilon: 0.5    #DBSCAN 邻域半径
+  dbscan_min_points: 10   #DBSCAN 最小邻域点数
+  cluster_min_points: 15   #聚类簇最小点数
 
 
 powerline_filter:
@@ -97,6 +104,13 @@ powerline_filter:
   length_threshold: 10.0            # 长度阈值（单位：米）
   proximity_radius: 1.0             # 邻近圆柱半径（单位：米）
   proximity_count_threshold: 100    # 邻近点数阈值
+
+
+obstacle_analyze:
+  cluster_tolerance: 0.3        # 聚类距离(m)
+  cluster_min_size: 30          # 最小点数
+  cluster_max_size: 50000       # 最大点数
+  distance_search_step: 0.05    # 冗余，可以不用
 
 
 
